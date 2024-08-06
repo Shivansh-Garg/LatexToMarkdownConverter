@@ -27,6 +27,9 @@ NEWLINE             \n
 {BACKSLASH}subsubsection{STARTBRACE}{SENTENCE}{ENDBRACE}            {token("SUBSUBSECTION");}
 {BACKSLASH}textit{STARTBRACE}{SENTENCE}{ENDBRACE}                   {token("ITALICS");}
 {BACKSLASH}textbf{STARTBRACE}{SENTENCE}{ENDBRACE}                   {token("BOLD");}
+{BACKSLASH}hrulefill                                                {token("HORIZONTALLINE");}
+{BACKSLASH}par                                                      {token("PARAGRAPH");}
+
 
 
 {SENTENCE}                           {token("SENTENCE"); }
@@ -43,6 +46,7 @@ int main(){
     yylex();
     return 0;
 }
+
 void token(const char* s) {
     printf("%s\n", s);
     return;
