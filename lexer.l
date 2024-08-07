@@ -34,7 +34,7 @@ BACKSLASH           \\
 
 
 {ENDBRACE}                                    {printTokenDetails("ENDBRACE"); return ENDBRACE;}
-{CONTENT}                                     {printTokenDetails("CONTENT"); return CONTENT;}
+{CONTENT}                                     {printTokenDetails("CONTENT"); yylval.strValue = new std::string(yytext); return CONTENT;}
 [\t\r]                                        {}
 [\n]                                          {printTokenDetails("NEWLINE");return NEWLINE;}
 .                                             {fprintf(stderr,"ERROR %c",*yytext);}
