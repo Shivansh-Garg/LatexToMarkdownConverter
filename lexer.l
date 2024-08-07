@@ -1,9 +1,12 @@
 %{
     #include <stdio.h>
     #include <string.h>
+    #include "parser.tab.h"
+    #include <stdlib.h>
+
 
     extern int yylex();
-    void token(const char* s);
+    void printTokenDetails(const char* s);
 %}
 
 ALPHABET            [a-zA-Z]
@@ -12,29 +15,30 @@ PUNCTUATION         [.,\-()]
 SPECIAL             [\#\$\%\&\~\_\^]
 STARTBRACE          \{
 ENDBRACE            \}
-SPACE               " "
+SPACE               [ ]
 TAB                 \t
 LETTER              ({ALPHABET}|{NUMBER}|{SPECIAL}|{PUNCTUATION})
 WORD                {ALPHABET}+
-TEXT                ({LETTER})+
-SENTENCE            ({TEXT}|{SPACE}|{TAB})+
+TEXT                {LETTER}+
+CONTENT            ({TEXT}|{SPACE}|{TAB})+
 BACKSLASH           \\
-NEWLINE             \n
 
 %%
-{BACKSLASH}section{STARTBRACE}{SENTENCE}{ENDBRACE}                  {token("SECTION");}
-{BACKSLASH}subsection{STARTBRACE}{SENTENCE}{ENDBRACE}               {token("SUBSECTION"); }
-{BACKSLASH}subsubsection{STARTBRACE}{SENTENCE}{ENDBRACE}            {token("SUBSUBSECTION");}
-{BACKSLASH}textit{STARTBRACE}{SENTENCE}{ENDBRACE}                   {token("ITALICS");}
-{BACKSLASH}textbf{STARTBRACE}{SENTENCE}{ENDBRACE}                   {token("BOLD");}
-{BACKSLASH}hrulefill                                                {token("HORIZONTALLINE");}
-{BACKSLASH}par                                                      {token("PARAGRAPH");}
+{BACKSLASH}section{STARTBRACE}                      {printTokenDetails("SECTION"); return SECTION;}
+{BACKSLASH}subsection{STARTBRACE}                   {printTokenDetails("SUBSECTION"); return SUBSECTION;}
+{BACKSLASH}subsubsection{STARTBRACE}                {printTokenDetails("SUBSUBSECTION"); return SUBSUBSECTION;}
+{BACKSLASH}textit{STARTBRACE}                       {printTokenDetails("ITALICS"); return ITALICS;}
+{BACKSLASH}textbf{STARTBRACE}                       {printTokenDetails("BOLD"); return BOLD;}
+{BACKSLASH}hrule                                    {printTokenDetails("HORIZONTALLINE");return HORIZONTALLINE;}
+{BACKSLASH}par                                      {printTokenDetails("PARAGRAPH");return PARAGRAPH;}
 
 
+{ENDBRACE}                                    {printTokenDetails("ENDBRACE"); return ENDBRACE;}
+{CONTENT}                                     {printTokenDetails("CONTENT"); return CONTENT;}
+[\t\r]                                        {}
+[\n]                                          {printTokenDetails("NEWLINE");return NEWLINE;}
+.                                             {fprintf(stderr,"ERROR %c",*yytext);}
 
-{SENTENCE}                           {token("SENTENCE"); }
-{NEWLINE}                            {token("NEWLINE"); }
-.                                    {token("OTHER"); }
 
 %%
 
@@ -42,12 +46,19 @@ int yywrap() {
     return 1;
 }
 
+/*
 int main(){
     yylex();
     return 0;
+}*/
+
+
+void printTokenDetails(const char* s) {
+    if (s != NULL) {
+        size_t length = strlen(yytext);  // Compute the length of the text holding
+        printf("token is %s, length: %zu\n", s, length);
+    } else {
+        printf("token is nullptr\n");
+    }
 }
 
-void token(const char* s) {
-    printf("%s\n", s);
-    return;
-}
