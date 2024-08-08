@@ -17,19 +17,22 @@ void yyerror(const char* s);
 }
 
 %union {
-    std::string* strValue;
+    std::string* stringValue;
 }
 
 %token SECTION SUBSECTION SUBSUBSECTION NEWLINE CONTENT  
 %token ITALICS BOLD HORIZONTALLINE PARAGRAPH ENDBRACE
+%token STARTBRACE CODEBLOCKSTART CODEBLOCKEND HYPERLINK
+
 
 %start page
 
-%type <strValue> page
-%type <strValue> sentences
-%type <strValue> sentence
-%type <strValue> SECTION SUBSECTION SUBSUBSECTION
-%type <strValue> headings fonts ITALICS BOLD CONTENT 
+%type <stringValue> page
+%type <stringValue> sentences
+%type <stringValue> sentence code
+%type <stringValue> SECTION SUBSECTION SUBSUBSECTION
+%type <stringValue> headings fonts ITALICS BOLD CONTENT 
+%type <stringValue> HYPERLINK link
 
 %%
 
@@ -47,25 +50,27 @@ sentences:
 
 sentence: headings  { $$ = $1; }
           | fonts   { $$ = $1; }
+          | code    { $$ = $1; }
+          | link    { $$ = $1;}
           | NEWLINE { $$ = new std::string("\n"); }
           | CONTENT { $$ = $1; }
           ;
 
 headings: SECTION CONTENT ENDBRACE { 
-        $$ = new std::string("# " + *$2 + "\n");
+        $$ = new std::string("# " + *$2);
         delete $2;
     } 
         | SUBSECTION CONTENT ENDBRACE { 
-        $$ = new std::string("## " + *$2 + "\n");
+        $$ = new std::string("## " + *$2);
         delete $2;
     } 
         | SUBSUBSECTION CONTENT ENDBRACE { 
-        $$ = new std::string("### " + *$2 + "\n");
+        $$ = new std::string("### " + *$2);
         delete $2;
     }
         ;
 
-fonts:   BOLD CONTENT ENDBRACE{ 
+fonts:   BOLD CONTENT ENDBRACE { 
             $$ = new std::string("**" + *$2 + "**"); 
             delete $2; 
         }
@@ -73,7 +78,23 @@ fonts:   BOLD CONTENT ENDBRACE{
             $$ = new std::string("*" + *$2 + "*"); 
             delete $2; 
         }
+        | HORIZONTALLINE {
+            $$ = new std::string("---");
+        }
+        | PARAGRAPH{
+            $$ = new std::string("\n");
+        }
         ;
+
+code:   CODEBLOCKSTART NEWLINE CONTENT {$$ = new std::string("```python\n" + *$3 );}
+        | CODEBLOCKEND {$$ = new std::string("\n```");}
+        ; 
+
+link:   HYPERLINK CONTENT ENDBRACE STARTBRACE CONTENT ENDBRACE {
+            $$ = new std::string("[" + *$5 + "]" + "(" + *$2 + ")");
+        }
+        ;
+
 
 %%
 
