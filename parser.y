@@ -23,6 +23,7 @@ void yyerror(const char* s);
 %token SECTION SUBSECTION SUBSUBSECTION NEWLINE CONTENT  
 %token ITALICS BOLD HORIZONTALLINE PARAGRAPH ENDBRACE
 %token STARTBRACE CODEBLOCKSTART CODEBLOCKEND HYPERLINK
+%token START TITLE PACKAGES DOCUMENT DATE 
 
 
 %start page
@@ -32,7 +33,8 @@ void yyerror(const char* s);
 %type <stringValue> sentence code
 %type <stringValue> SECTION SUBSECTION SUBSUBSECTION
 %type <stringValue> headings fonts ITALICS BOLD CONTENT 
-%type <stringValue> HYPERLINK link
+%type <stringValue> HYPERLINK link linkfirsthalf linksecondhalf
+%type <stringValue> ignore
 
 %%
 
@@ -52,6 +54,7 @@ sentence: headings  { $$ = $1; }
           | fonts   { $$ = $1; }
           | code    { $$ = $1; }
           | link    { $$ = $1;}
+          | ignore  { $$ = new std::string("");}
           | NEWLINE { $$ = new std::string("\n"); }
           | CONTENT { $$ = $1; }
           ;
@@ -90,10 +93,21 @@ code:   CODEBLOCKSTART NEWLINE CONTENT {$$ = new std::string("```python\n" + *$3
         | CODEBLOCKEND {$$ = new std::string("\n```");}
         ; 
 
-link:   HYPERLINK CONTENT ENDBRACE STARTBRACE CONTENT ENDBRACE {
-            $$ = new std::string("[" + *$5 + "]" + "(" + *$2 + ")");
+link:   linkfirsthalf linksecondhalf {
+            $$ = new std::string("[" + *$2 + "]" + "(" + *$1 + ")");
         }
         ;
+
+ignore: START NEWLINE {}
+        | PACKAGES NEWLINE {}
+        | DATE NEWLINE {}
+        | DOCUMENT NEWLINE {}
+        | TITLE NEWLINE {}
+        ;
+
+linkfirsthalf: HYPERLINK CONTENT ENDBRACE {$$ = $2;};
+
+linksecondhalf: STARTBRACE CONTENT ENDBRACE {$$ = $2;};
 
 
 %%
