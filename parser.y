@@ -23,7 +23,8 @@ void yyerror(const char* s);
 %token SECTION SUBSECTION SUBSUBSECTION NEWLINE CONTENT  
 %token ITALICS BOLD HORIZONTALLINE PARAGRAPH ENDBRACE
 %token STARTBRACE CODEBLOCKSTART CODEBLOCKEND HYPERLINK
-%token START TITLE PACKAGES DOCUMENT DATE 
+%token START TITLE PACKAGES DOCUMENT DATE IMAGESTART
+%token STARTSQUAREBRACE ENDSQUAREBRACE TEXTWIDTH END
 
 
 %start page
@@ -34,7 +35,7 @@ void yyerror(const char* s);
 %type <stringValue> SECTION SUBSECTION SUBSUBSECTION
 %type <stringValue> headings fonts ITALICS BOLD CONTENT 
 %type <stringValue> HYPERLINK link linkfirsthalf linksecondhalf
-%type <stringValue> ignore
+%type <stringValue> ignore image imagefirsthalf imagesecondhalf
 
 %%
 
@@ -54,6 +55,7 @@ sentence: headings  { $$ = $1; }
           | fonts   { $$ = $1; }
           | code    { $$ = $1; }
           | link    { $$ = $1;}
+          | image   { $$ = $1; }
           | ignore  { $$ = new std::string("");}
           | NEWLINE { $$ = new std::string("\n"); }
           | CONTENT { $$ = $1; }
@@ -98,16 +100,26 @@ link:   linkfirsthalf linksecondhalf {
         }
         ;
 
+image:  imagefirsthalf imagesecondhalf { $$ = new std::string(*$1 + *$2);}
+        ;
+
+        
+
 ignore: START NEWLINE {}
         | PACKAGES NEWLINE {}
         | DATE NEWLINE {}
         | DOCUMENT NEWLINE {}
         | TITLE NEWLINE {}
+        | END   NEWLINE{}
         ;
 
 linkfirsthalf: HYPERLINK CONTENT ENDBRACE {$$ = $2;};
 
 linksecondhalf: STARTBRACE CONTENT ENDBRACE {$$ = $2;};
+
+imagefirsthalf: IMAGESTART CONTENT TEXTWIDTH ENDSQUAREBRACE {$$ = new std::string("![IMAGE]");};
+
+imagesecondhalf: STARTBRACE CONTENT ENDBRACE {$$ = new std::string("(" + *$2 + ")");};
 
 
 %%
