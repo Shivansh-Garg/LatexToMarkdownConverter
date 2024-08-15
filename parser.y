@@ -25,6 +25,7 @@ void yyerror(const char* s);
 %token STARTBRACE CODEBLOCKSTART CODEBLOCKEND HYPERLINK
 %token START TITLE PACKAGES DOCUMENT DATE IMAGESTART
 %token STARTSQUAREBRACE ENDSQUAREBRACE TEXTWIDTH END
+%token UNORDEREDLIST ENDUNORDEREDLIST ITEM
 
 
 %start page
@@ -36,6 +37,7 @@ void yyerror(const char* s);
 %type <stringValue> headings fonts ITALICS BOLD CONTENT 
 %type <stringValue> HYPERLINK link linkfirsthalf linksecondhalf
 %type <stringValue> ignore image imagefirsthalf imagesecondhalf
+%type <stringValue> lists items
 
 %%
 
@@ -55,6 +57,7 @@ sentence: headings  { $$ = $1; }
           | fonts   { $$ = $1; }
           | code    { $$ = $1; }
           | link    { $$ = $1;}
+          | lists   { $$ = $1;}
           | image   { $$ = $1; }
           | ignore  { $$ = new std::string("");}
           | NEWLINE { $$ = new std::string("\n"); }
@@ -91,16 +94,36 @@ fonts:   BOLD CONTENT ENDBRACE {
         }
         ;
 
-code:   CODEBLOCKSTART NEWLINE CONTENT {$$ = new std::string("```python\n" + *$3 );}
+code:   CODEBLOCKSTART NEWLINE CONTENT {
+        $$ = new std::string("```python\n" + *$3 );
+        delete $3;
+        }
         | CODEBLOCKEND {$$ = new std::string("\n```");}
         ; 
 
 link:   linkfirsthalf linksecondhalf {
             $$ = new std::string("[" + *$2 + "]" + "(" + *$1 + ")");
+            delete $1;
+            delete $2;
         }
         ;
 
-image:  imagefirsthalf imagesecondhalf { $$ = new std::string(*$1 + *$2);}
+lists:  UNORDEREDLIST NEWLINE items {$$ = $3;}
+        | items {$$ = $1;}
+        ;
+
+items:  ENDUNORDEREDLIST {$$ = new std::string("");}
+        | CONTENT ITEM CONTENT NEWLINE {
+        $$ = new std::string("-" + *$3 + "\n");
+        delete $3;
+        }
+        ;
+
+image:  imagefirsthalf imagesecondhalf { 
+        $$ = new std::string(*$1 + *$2);
+        delete $1;
+        delete $2;
+        }
         ;
 
         
@@ -119,7 +142,11 @@ linksecondhalf: STARTBRACE CONTENT ENDBRACE {$$ = $2;};
 
 imagefirsthalf: IMAGESTART CONTENT TEXTWIDTH ENDSQUAREBRACE {$$ = new std::string("![IMAGE]");};
 
-imagesecondhalf: STARTBRACE CONTENT ENDBRACE {$$ = new std::string("(" + *$2 + ")");};
+imagesecondhalf: STARTBRACE CONTENT ENDBRACE {
+                 $$ = new std::string("(" + *$2 + ")");
+                 delete $2;
+                 }
+                 ;
 
 
 %%
