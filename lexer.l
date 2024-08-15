@@ -51,6 +51,10 @@ PERCENTAGE          [\%]
 {BACKSLASH}hrule                                             {printTokenDetails("HORIZONTALLINE");return HORIZONTALLINE;}
 {BACKSLASH}par                                               {printTokenDetails("PARAGRAPH");return PARAGRAPH;}
 
+{BACKSLASH}begin{STARTBRACE}itemize{ENDBRACE}                {printTokenDetails("UNORDEREDLIST");return UNORDEREDLIST;}
+{BACKSLASH}item                                              {printTokenDetails("ITEM");return ITEM;}
+{BACKSLASH}end{STARTBRACE}itemize{ENDBRACE}                  {printTokenDetails("ENDUNORDEREDLIST");return ENDUNORDEREDLIST;}
+
 {STARTBRACE}                                                 {printTokenDetails("STARTBRACE"); return STARTBRACE;}
 {ENDBRACE}                                                   {printTokenDetails("ENDBRACE"); return ENDBRACE;}
 {STARTSQUAREBRACE}                                           {printTokenDetails("STARTSQUAREBRACE");return STARTSQUAREBRACE;}
