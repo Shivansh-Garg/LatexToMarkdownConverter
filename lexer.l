@@ -34,7 +34,7 @@ PERCENTAGE          [\%]
 {BACKSLASH}usepackage{STARTBRACE}{CONTENT}{ENDBRACE}         {printTokenDetails("PACKAGES"); return PACKAGES;}
 {BACKSLASH}documentclass{STARTBRACE}{CONTENT}{ENDBRACE}      {printTokenDetails("DOCUMENT"); return DOCUMENT;}
 {BACKSLASH}date{STARTBRACE}{CONTENT}{ENDBRACE}               {printTokenDetails("DATE"); return DATE;}
-{BACKSLASH}end{STARTBRACE}document{ENDBRACE}                {printTokenDetails("END"); return END;}
+{BACKSLASH}end{STARTBRACE}document{ENDBRACE}                 {printTokenDetails("END"); return END;}
 
 {BACKSLASH}section{STARTBRACE}                               {printTokenDetails("SECTION"); return SECTION;}
 {BACKSLASH}subsection{STARTBRACE}                            {printTokenDetails("SUBSECTION"); return SUBSECTION;}
@@ -54,6 +54,8 @@ PERCENTAGE          [\%]
 {BACKSLASH}begin{STARTBRACE}itemize{ENDBRACE}                {printTokenDetails("UNORDEREDLIST");return UNORDEREDLIST;}
 {BACKSLASH}item                                              {printTokenDetails("ITEM");return ITEM;}
 {BACKSLASH}end{STARTBRACE}itemize{ENDBRACE}                  {printTokenDetails("ENDUNORDEREDLIST");return ENDUNORDEREDLIST;}
+{BACKSLASH}begin{STARTBRACE}enumerate{ENDBRACE}              {printTokenDetails("ORDEREDLIST"); return ORDEREDLIST;}
+{BACKSLASH}end{STARTBRACE}enumerate{ENDBRACE}                {printTokenDetails("ENDORDEREDLIST"); return ENDORDEREDLIST;}   
 
 {STARTBRACE}                                                 {printTokenDetails("STARTBRACE"); return STARTBRACE;}
 {ENDBRACE}                                                   {printTokenDetails("ENDBRACE"); return ENDBRACE;}
@@ -83,7 +85,7 @@ int main(){
 void printTokenDetails(const char* s) {
     if (s != NULL) {
         size_t length = strlen(yytext);  // Compute the length of the text holding
-       /*printf("token is %s, length: %zu\n", s, length);*/
+       printf("token is %s, length: %zu\n", s, length);
     } else {
         printf("token is nullptr\n");
     }

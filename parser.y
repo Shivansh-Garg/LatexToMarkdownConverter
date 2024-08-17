@@ -1,10 +1,13 @@
 %{
 #include <string>
 #include <iostream>
+#include <fstream>
 
 static std::string* outputString = nullptr;
 
 extern int yylex(void);
+
+int countOrderNo = 0;
 
 void yyerror(const char* s);
 %}
@@ -14,10 +17,12 @@ void yyerror(const char* s);
     #include <string>
     extern int yylex(void);
     std::string* printMarkdown(void);
+
 }
 
 %union {
     std::string* stringValue;
+    int intValue;
 }
 
 %token SECTION SUBSECTION SUBSUBSECTION NEWLINE CONTENT  
@@ -26,6 +31,7 @@ void yyerror(const char* s);
 %token START TITLE PACKAGES DOCUMENT DATE IMAGESTART
 %token STARTSQUAREBRACE ENDSQUAREBRACE TEXTWIDTH END
 %token UNORDEREDLIST ENDUNORDEREDLIST ITEM
+%token ORDEREDLIST ENDORDEREDLIST
 
 
 %start page
@@ -37,7 +43,9 @@ void yyerror(const char* s);
 %type <stringValue> headings fonts ITALICS BOLD CONTENT 
 %type <stringValue> HYPERLINK link linkfirsthalf linksecondhalf
 %type <stringValue> ignore image imagefirsthalf imagesecondhalf
-%type <stringValue> lists items
+%type <stringValue> lists unorderedListItems orderedListItems
+
+%type <countOrderNo> ORDEREDLIST
 
 %%
 
@@ -108,15 +116,30 @@ link:   linkfirsthalf linksecondhalf {
         }
         ;
 
-lists:  UNORDEREDLIST NEWLINE items {$$ = $3;}
-        | items {$$ = $1;}
+lists:  UNORDEREDLIST NEWLINE unorderedListItems {$$ = $3;}
+        | ORDEREDLIST NEWLINE orderedListItems {
+            countOrderNo = 0;
+            $$ = $3;
+            }
         ;
 
-items:  ENDUNORDEREDLIST {$$ = new std::string("");}
-        | CONTENT ITEM CONTENT NEWLINE {
-        $$ = new std::string("-" + *$3 + "\n");
-        delete $3;
+unorderedListItems : ENDUNORDEREDLIST {$$ = new std::string("");}
+        | CONTENT ITEM CONTENT NEWLINE unorderedListItems{
+            $$ = new std::string("-" + *$3 + "\n" + *$5);
+            delete $3;
+            delete $5;
         }
+        ;
+
+orderedListItems : ENDORDEREDLIST {
+            $$ = new std::string("");
+        } 
+        |CONTENT ITEM CONTENT NEWLINE orderedListItems {
+         countOrderNo++;
+         $$ = new std::string(std::to_string(countOrderNo) + "." + *$3 + "\n" + *$5);
+         delete $3;
+         delete $5;
+        } 
         ;
 
 image:  imagefirsthalf imagesecondhalf { 
