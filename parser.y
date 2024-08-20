@@ -1,101 +1,26 @@
 %{
-#include <string>
+#include <memory>   
+#include <string>   
 #include <iostream>
-#include <fstream>
-#include <memory>
-#include <vector>
+#include "AST.h"
+using namespace std;
+extern int yylex(void); 
 
-extern int yylex(void);
-int countOrderNo = 0;
+static unique_ptr<ASTNode> root = nullptr;
 void yyerror(const char* s);
+int countOrderNo = 0;
 %}
-
-%code requires{
-    #include <string>
-    #include <memory>
-    #include <vector>
-    #include <iostream>
-    #include <fstream>
-    using namespace std;
-
-    struct ASTNode {
-        string type;  // Node type (e.g., "section", "content", etc.)
-        string value; // Node value (e.g., actual content text)
-        vector<unique_ptr<ASTNode>> children; // Child nodes
-
-        ASTNode(const string& type, const string& value = "")
-            : type(type), value(value) {}
-
-        void addChild(unique_ptr<ASTNode> child) {
-            children.push_back(move(child));
-        }
-    };
-
-    void printASTToFile(const ASTNode* node, ofstream& outFile, int indent = 0);
-    string convertASTToMarkdown(const ASTNode* node);
-    static unique_ptr<ASTNode> root = nullptr;
-
-}
-
-
-%code{
-void printASTToFile(const ASTNode* node, ofstream& outFile, int indent ) {
-    if (!node) return;
-    for (int i = 0; i < indent; ++i) outFile << "  "; 
-    outFile << node->type << ": " << node->value << endl;
-    for (const auto& child : node->children) {
-        printASTToFile(child.get(), outFile, indent + 1);
-    }
-}
-
-string convertASTToMarkdown(const ASTNode* node) {
-    if (!node) return "";
-    string markdown;
-    
-    if (node->type == "heading") {
-        markdown += "# " + node->value + "\n";
-    } else if (node->type == "subheading") {
-        markdown += "## " + node->value + "\n";
-    } else if (node->type == "subsubheading") {
-        markdown += "### " + node->value + "\n";
-    } else if (node->type == "bold") {
-        markdown += "**" + node->value + "**";
-    } else if (node->type == "italics") {
-        markdown += "*" + node->value + "*";
-    } else if (node->type == "horizontal_line") {
-        markdown += "---\n";
-    } else if (node->type == "paragraph") {
-        markdown += "\n";
-    } else if (node->type == "codeblock") {
-        markdown += "```python\n" + node->value + "\n```";
-    } else if (node->type == "link") {
-        markdown += node->value;
-    } else if (node->type == "unordered_list" || node->type == "ordered_list") {
-        /*for (const auto& child : node->children) {
-            markdown += convertASTToMarkdown(child.get());
-        }*/
-    } else if (node->type == "list_item") {
-        markdown += node->value + "\n";
-    } else if (node->type == "image") {
-        markdown += node->value + "\n";
-    } else if (node->type == "content") {
-        markdown += node->value;
-    } else if (node->type == "newline"){
-        markdown += "\n";
-    }
-
-    for (const auto& child : node->children) {
-        markdown += convertASTToMarkdown(child.get());
-    }
-
-    return markdown;
-}
-}
 
 %union {
     ASTNode* node;
     string* stringValue;
     int intValue;
+}
+
+%code requires{
+    #include <string>
+    #include "AST.h"
+    using namespace std;
 }
 
 %token SECTION SUBSECTION SUBSUBSECTION NEWLINE CONTENT  
@@ -112,7 +37,7 @@ string convertASTToMarkdown(const ASTNode* node) {
 %type <node> unorderedListItems orderedListItems image
 %type <node> linkfirsthalf linksecondhalf imagefirsthalf imagesecondhalf ignore
 
-%type<stringValue> CONTENT
+%type<stringValue> CONTENT sametext
 
 %start page
 
@@ -176,15 +101,29 @@ fonts:
         }
         ;
 
-code: 
-          CODEBLOCKSTART NEWLINE CONTENT {
-            $$ = new ASTNode("codeblock", *$3);
-            delete $3;
-        }
-        | CODEBLOCKEND {
-            $$ = new ASTNode("codeblock_end", "```");
-        }
-        ;
+code:
+    CODEBLOCKSTART sametext CODEBLOCKEND {
+        $$ = new ASTNode("codeblock", *$2);
+        delete $2;
+    }
+    ;
+
+sametext:
+    NEWLINE sametext {
+        $$ = new std::string("\n" + *$2);
+        delete $2;
+    }
+    | CONTENT sametext {
+        $$ = new std::string(*$1 + *$2);
+        delete $2;
+    }
+    | CONTENT {
+        $$ = new std::string(*$1);
+    }
+    | NEWLINE {
+        $$ = new std::string("\n");
+    }
+    ;
 
 link: 
           linkfirsthalf linksecondhalf {
@@ -207,10 +146,10 @@ lists:
         ;
 
 unorderedListItems: 
-          ENDUNORDEREDLIST { $$ = new ASTNode("unordered_list_end", ""); }
+        ENDUNORDEREDLIST { $$ = new ASTNode("unordered_list_end", ""); }
         | CONTENT ITEM CONTENT NEWLINE unorderedListItems {
             $$ = $5;
-            $$->addChild(make_unique<ASTNode>("list_item", *$3));
+            $$->addChild(make_unique<ASTNode>("list_item", "-" + *$3));
             delete $3;
         }
         ;
@@ -266,6 +205,7 @@ void yyerror(const char* s) {
 
 int main() {
     if (yyparse() == 0 && root) {
+        // Print the AST to a file
         ofstream outFile("ast_output.txt");
         if (outFile.is_open()) {
             printASTToFile(root.get(), outFile);
@@ -274,6 +214,7 @@ int main() {
             cerr << "Error opening file to write AST." << endl;
         }
 
+        // Print markdown conversion to the console
         string markdown = convertASTToMarkdown(root.get());
         cout << markdown << endl;
     }
