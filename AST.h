@@ -6,19 +6,20 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+using namespace std;
 
 struct ASTNode {
-    std::string type;
-    std::string value;
-    std::vector<std::unique_ptr<ASTNode>> children;
+    string type;
+    string value;
+    vector<unique_ptr<ASTNode>> children;
 
-    ASTNode(const std::string& type, const std::string& value = "")
+    ASTNode(const string& type, const string& value = "")
         : type(type), value(value) {}
 
-    void addChild(std::unique_ptr<ASTNode> child);
+    void addChild(unique_ptr<ASTNode> child);
 };
 
-void printASTToFile(const ASTNode* node, std::ofstream& outFile, int indent = 0);
-std::string convertASTToMarkdown(const ASTNode* node);
+void printASTToFile(const ASTNode* node, ofstream& outFile, int indent = 0);
+string convertASTToMarkdown(const ASTNode* node);
 
 #endif 
