@@ -3,4 +3,4 @@ It is the first assignment of COP 701 in which we have to convert a file of late
 
 Currently it can convert section, bold, italics, paragraph, hyperlink, horizontal line .. till ordered list.
 AST has been implemented.
-Note: Now Table will be implemented
+Table has been implemented but it is in reverse order , so will change grammar of it now.
