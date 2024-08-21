@@ -2,6 +2,7 @@
 #include <memory>   
 #include <string>   
 #include <iostream>
+#include <algorithm>
 #include "AST.h"
 using namespace std;
 extern int yylex(void); 
@@ -9,6 +10,9 @@ extern int yylex(void);
 static unique_ptr<ASTNode> root = nullptr;
 void yyerror(const char* s);
 int countOrderNo = 0;
+int tableLineNo = 0;
+int tableColumnCount = 0;
+
 %}
 
 %union {
@@ -19,6 +23,7 @@ int countOrderNo = 0;
 
 %code requires{
     #include <string>
+    #include <algorithm>
     #include "AST.h"
     using namespace std;
 }
@@ -29,15 +34,17 @@ int countOrderNo = 0;
 %token START TITLE PACKAGES DOCUMENT DATE IMAGESTART
 %token STARTSQUAREBRACE ENDSQUAREBRACE TEXTWIDTH END
 %token UNORDEREDLIST ENDUNORDEREDLIST ITEM
-%token ORDEREDLIST ENDORDEREDLIST
+%token ORDEREDLIST ENDORDEREDLIST TABLEBEGIN TABLECOLUMNS
+%token TABLELINE BACKSLASH TABLEEND 
 
 %type <node> page
 %type <node> sentences
 %type <node> sentence code headings fonts link lists
 %type <node> unorderedListItems orderedListItems image
 %type <node> linkfirsthalf linksecondhalf imagefirsthalf imagesecondhalf ignore
+%type <node> table tablerows countTableColumn
 
-%type<stringValue> CONTENT sametext
+%type<stringValue> CONTENT sametext TABLECOLUMNS
 
 %start page
 
@@ -64,6 +71,7 @@ sentence:
         | link      { $$ = $1; }
         | lists     { $$ = $1; }
         | image     { $$ = $1; }
+        | table     { $$ = $1; }
         | ignore    { $$ = new ASTNode("ignore", ""); }
         | NEWLINE   { $$ = new ASTNode("newline", "\n"); }
         | CONTENT   { $$ = new ASTNode("content", *$1); delete $1; }
@@ -134,11 +142,11 @@ link:
         ;
 
 lists: 
-          UNORDEREDLIST NEWLINE unorderedListItems {
+        UNORDEREDLIST NEWLINE unorderedListItems ENDUNORDEREDLIST {
             $$ = new ASTNode("unordered_list", "");
             $$->addChild(unique_ptr<ASTNode>($3));
         }
-        | ORDEREDLIST NEWLINE orderedListItems {
+        | ORDEREDLIST NEWLINE orderedListItems ENDORDEREDLIST {
             countOrderNo = 0;
             $$ = new ASTNode("ordered_list", "");
             $$->addChild(unique_ptr<ASTNode>($3));
@@ -146,20 +154,29 @@ lists:
         ;
 
 unorderedListItems: 
-        ENDUNORDEREDLIST { $$ = new ASTNode("unordered_list_end", ""); }
-        | CONTENT ITEM CONTENT NEWLINE unorderedListItems {
-            $$ = $5;
+        unorderedListItems CONTENT ITEM CONTENT NEWLINE{
+            $$ = $1;
+            $$->addChild(make_unique<ASTNode>("list_item", "-" + *$4));
+            delete $4;
+        }
+        | CONTENT ITEM CONTENT NEWLINE{
+            $$ = new ASTNode("list_items");
             $$->addChild(make_unique<ASTNode>("list_item", "-" + *$3));
             delete $3;
         }
         ;
 
 orderedListItems: 
-          ENDORDEREDLIST { $$ = new ASTNode("ordered_list_end", ""); }
-        | CONTENT ITEM CONTENT NEWLINE orderedListItems {
+        orderedListItems CONTENT ITEM CONTENT NEWLINE  {
             countOrderNo++;
-            $$ = $5;
-            $$->addChild(make_unique<ASTNode>("list_item", to_string(countOrderNo) + ". " + *$3));
+            $$ = $1;
+            $$->addChild(make_unique<ASTNode>("list_item", to_string(countOrderNo) + "." + *$4));
+            delete $4;
+        }
+        | CONTENT ITEM CONTENT NEWLINE {
+            countOrderNo++;
+            $$ = new ASTNode("list_items");
+            $$->addChild(make_unique<ASTNode>("list_item", to_string(countOrderNo) + "." + *$3));
             delete $3;
         }
         ;
@@ -171,6 +188,45 @@ image:
             delete $2;
         }
         ;
+
+table:  
+        TABLEBEGIN countTableColumn NEWLINE tablerows {
+            $$ = new ASTNode("table", "");
+            $$->addChild(unique_ptr<ASTNode>($4));
+        }
+
+countTableColumn:
+     TABLECOLUMNS {
+        tableColumnCount = count($1->begin(), $1->end(), 'c') ;  
+    }
+    ;
+
+tablerows : 
+        CONTENT BACKSLASH BACKSLASH NEWLINE tablerows {
+        string modifiedContent = *$1;
+        replace(modifiedContent.begin(), modifiedContent.end(), '&', '|');
+
+        $$ = $5;
+        $$->addChild(make_unique<ASTNode>("table_item", "|" +  modifiedContent + "|"));
+        delete $1;
+    }
+    | TABLELINE NEWLINE tablerows{
+        $$ = $3;
+        tableLineNo++;
+        if (tableLineNo == 2) {
+            string separatorLine = "|";
+            for(int i = 0; i < tableColumnCount; ++i) {
+                separatorLine += "----------------------|";
+            }
+            $$->addChild(make_unique<ASTNode>("table_item", separatorLine));  
+        }
+        
+    }
+    | TABLEEND{
+        $$ = new ASTNode("table_end","");
+    }
+    ;
+
 
 ignore: 
           START NEWLINE { $$ = new ASTNode("ignore", ""); }
