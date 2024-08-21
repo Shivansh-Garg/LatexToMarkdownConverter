@@ -190,7 +190,7 @@ image:
         ;
 
 table:  
-        TABLEBEGIN countTableColumn NEWLINE tablerows {
+        TABLEBEGIN countTableColumn NEWLINE tablerows TABLEEND{
             $$ = new ASTNode("table", "");
             $$->addChild(unique_ptr<ASTNode>($4));
         }
@@ -202,28 +202,43 @@ countTableColumn:
     ;
 
 tablerows : 
-        CONTENT BACKSLASH BACKSLASH NEWLINE tablerows {
-        string modifiedContent = *$1;
+        tablerows CONTENT BACKSLASH BACKSLASH NEWLINE {
+        string modifiedContent = *$2;
         replace(modifiedContent.begin(), modifiedContent.end(), '&', '|');
 
-        $$ = $5;
+        $$ = $1;
         $$->addChild(make_unique<ASTNode>("table_item", "|" +  modifiedContent + "|"));
-        delete $1;
+        delete $2;
     }
-    | TABLELINE NEWLINE tablerows{
-        $$ = $3;
+    | tablerows TABLELINE NEWLINE {
+        $$ = $1;
         tableLineNo++;
         if (tableLineNo == 2) {
             string separatorLine = "|";
             for(int i = 0; i < tableColumnCount; ++i) {
                 separatorLine += "----------------------|";
             }
-            $$->addChild(make_unique<ASTNode>("table_item", separatorLine));  
+            $$->addChild(make_unique<ASTNode>("table_separator", separatorLine));  
         }
         
     }
-    | TABLEEND{
-        $$ = new ASTNode("table_end","");
+    | CONTENT BACKSLASH BACKSLASH NEWLINE {
+        string modifiedContent = *$1;
+        replace(modifiedContent.begin(), modifiedContent.end(), '&', '|');
+        $$ = new ASTNode("table_items");
+        $$->addChild(make_unique<ASTNode>("table_item", "|" +  modifiedContent + "|"));
+        delete $1;
+    }
+    | TABLELINE NEWLINE{
+        $$ = new ASTNode("table_header");
+        tableLineNo++;
+        if (tableLineNo == 2) {
+            string separatorLine = "|";
+            for(int i = 0; i < tableColumnCount; ++i) {
+                separatorLine += "----------------------|";
+            }
+            $$->addChild(make_unique<ASTNode>("table_separator", separatorLine));  
+        }
     }
     ;
 
