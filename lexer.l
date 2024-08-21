@@ -26,7 +26,7 @@ CONTENT            ({TEXT}|{SPACE}|{TAB})+
 BACKSLASH           \\
 ENDLINE             [\n]
 PERCENTAGE          [\%]
-            
+TABLECOLUMNS        [ |c]+
 
 %%
 {BACKSLASH}begin{STARTBRACE}document{ENDBRACE}               {printTokenDetails("START"); return START;}
@@ -56,15 +56,20 @@ PERCENTAGE          [\%]
 {BACKSLASH}end{STARTBRACE}itemize{ENDBRACE}                  {printTokenDetails("ENDUNORDEREDLIST");return ENDUNORDEREDLIST;}
 {BACKSLASH}begin{STARTBRACE}enumerate{ENDBRACE}              {printTokenDetails("ORDEREDLIST"); return ORDEREDLIST;}
 {BACKSLASH}end{STARTBRACE}enumerate{ENDBRACE}                {printTokenDetails("ENDORDEREDLIST"); return ENDORDEREDLIST;}   
+{BACKSLASH}begin{STARTBRACE}tabular{ENDBRACE}                {printTokenDetails("TABLEBEGIN"); return TABLEBEGIN;}
+{STARTBRACE}{TABLECOLUMNS}{ENDBRACE}                         {printTokenDetails("TABLECOLUMNS");yylval.stringValue = new std::string(yytext); return TABLECOLUMNS;}
+{BACKSLASH}hline                                             {printTokenDetails("TABLELINE"); return TABLELINE;}
+{BACKSLASH}end{STARTBRACE}tabular{ENDBRACE}                  {printTokenDetails("TABLEEND"); return TABLEEND;}   
 
 {STARTBRACE}                                                 {printTokenDetails("STARTBRACE"); return STARTBRACE;}
 {ENDBRACE}                                                   {printTokenDetails("ENDBRACE"); return ENDBRACE;}
 {STARTSQUAREBRACE}                                           {printTokenDetails("STARTSQUAREBRACE");return STARTSQUAREBRACE;}
 {ENDSQUAREBRACE}                                             {printTokenDetails("ENDSQUAREBRACE"); return ENDSQUAREBRACE;}
-[ \t\r]                                                      {/*ignore these characters */};
+[ \r]                                                      {/*ignore these characters */};
 {PERCENTAGE}{CONTENT}                                        {printTokenDetails("COMMENT");}
 {CONTENT}                                                    {printTokenDetails("CONTENT"); yylval.stringValue = new std::string(yytext); return CONTENT;}
 [\n]                                                         {printTokenDetails("NEWLINE");return NEWLINE;}
+{BACKSLASH}                                                  {printTokenDetails("BACKSLASH"); return BACKSLASH;}
 .                                                            {fprintf(stderr,"ERROR %c",*yytext);}
 
 
@@ -85,7 +90,7 @@ int main(){
 void printTokenDetails(const char* s) {
     if (s != NULL) {
         size_t length = strlen(yytext);  // Compute the length of the text holding
-      /* printf("token is %s, length: %zu\n", s, length);*/
+       /*printf("token is %s, length: %zu\n", s, length);*/
     } else {
         printf("token is nullptr\n");
     }
