@@ -36,7 +36,7 @@ std::string convertASTToMarkdown(const ASTNode* node) {
     } else if (node->type == "link") {
         markdown += node->value;
     } else if (node->type == "unordered_list" || node->type == "ordered_list") {
-        // do nothing.
+        // do nothing.z
     } else if (node->type == "list_item") {
         markdown += node->value + "\n";
     } else if (node->type == "image") {
@@ -45,6 +45,12 @@ std::string convertASTToMarkdown(const ASTNode* node) {
         markdown += node->value;
     }else if (node->type == "newline") {
         markdown += "\n";
+    }else if (node->type == "table") {
+ 
+    } else if (node->type == "table_item") {
+        markdown += node->value + "\n";  
+    } else if (node->type == "table_end"){
+        markdown += node->value ;
     }
 
     for (const auto& child : node->children) {
