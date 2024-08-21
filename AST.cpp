@@ -51,6 +51,8 @@ std::string convertASTToMarkdown(const ASTNode* node) {
         markdown += node->value + "\n";  
     } else if (node->type == "table_end"){
         markdown += node->value ;
+    }else if (node->type == "table_separator"){
+        markdown += node->value + "\n" ;
     }
 
     for (const auto& child : node->children) {
