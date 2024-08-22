@@ -24,8 +24,8 @@ int main(int argc, char* argv[]) {
     const char* outputFilePath = argv[2];
 
     // Open the input file in read mode
-    FILE* fptrin = fopen(inputFilePath, "r");
-    if (fptrin == nullptr) {
+    FILE* fileInputPointer = fopen(inputFilePath, "r");
+    if (fileInputPointer == nullptr) {
         cerr << "Error: Unable to open Latex File\n";
         return 1; // Exit with an error code
     }
@@ -34,18 +34,18 @@ int main(int argc, char* argv[]) {
     ofstream outputFile(outputFilePath);
     if (!outputFile.is_open()) {
         cerr << "Error: Unable to open Markdown File\n";
-        fclose(fptrin); // Close the input file before exiting
+        fclose(fileInputPointer); // Close the input file before exiting
         return 1; // Exit with an error code
     }
 
     // Set the lexer input to the input file
-    yyin = fptrin;
+    yyin = fileInputPointer;
 
     // Start parsing
     cout << "Starting parsing..." << endl;
     if (yyparse() != 0) { // Call the bison-generated parser function
         cerr << "Parsing failed." << endl;
-        fclose(fptrin); // Close the input file before exiting
+        fclose(fileInputPointer); // Close the input file before exiting
         return 1; // Exit with an error code
     }
 
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
     // Check if the root is correctly set
     if (!root) {
         cerr << "AST root is not set. Parsing may have failed." << endl;
-        fclose(fptrin); // Close the input file before exiting
+        fclose(fileInputPointer); // Close the input file before exiting
         return 1; // Exit with an error code
     }
 
@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Close the input file
-    fclose(fptrin);
+    fclose(fileInputPointer);
 
     return 0;
 }
