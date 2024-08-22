@@ -21,5 +21,6 @@ struct ASTNode {
 
 void printASTToFile(const ASTNode* node, ofstream& outFile, int indent = 0);
 string convertASTToMarkdown(const ASTNode* node);
+extern unique_ptr<ASTNode> root;
 
 #endif 

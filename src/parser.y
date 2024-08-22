@@ -7,7 +7,7 @@
 using namespace std;
 extern int yylex(void); 
 
-static unique_ptr<ASTNode> root = nullptr;
+extern unique_ptr<ASTNode> root;
 void yyerror(const char* s);
 int countOrderNo = 0;
 int tableLineNo = 0;
@@ -274,6 +274,7 @@ void yyerror(const char* s) {
     cerr << "Error: " << s << endl;
 }
 
+/*
 int main() {
     if (yyparse() == 0 && root) {
         // Print the AST to a file
@@ -291,3 +292,4 @@ int main() {
     }
     return 0;
 }
+*/

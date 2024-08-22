@@ -89,8 +89,8 @@ int main(){
 
 void printTokenDetails(const char* s) {
     if (s != NULL) {
-        size_t length = strlen(yytext);  // Compute the length of the text holding
-       /*printf("token is %s, length: %zu\n", s, length);*/
+       /* size_t length = strlen(yytext);  // Compute the length of the text holding
+       printf("token is %s, length: %zu\n", s, length);*/
     } else {
         printf("token is nullptr\n");
     }
