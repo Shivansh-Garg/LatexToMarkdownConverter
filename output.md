@@ -13,11 +13,9 @@ IIT Delhi is located in Hauz Khas, New Delhi. It offers undergraduate, postgradu
 The institute is renowned for its rigorous academic programs and distinguished faculty.
 
 ```python
-
 def iit_delhi_info():
     print("Welcome to IIT Delhi!")
     print("Explore the world-class research and academic programs.")
-
 ```
 
 

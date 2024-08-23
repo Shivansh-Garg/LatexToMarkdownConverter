@@ -8,11 +8,11 @@
 using namespace std;
 
 // Global variables
-unique_ptr<ASTNode> root = nullptr;  // Declare the global root variable
-extern int yyparse();             // Declare the parser function
-extern int yylex();               // Declare the lexer function
-extern void yyerror(const char* s); // Declare the error reporting function
-extern FILE* yyin; // Declare the lexer input file pointer
+unique_ptr<ASTNode> root = nullptr;  
+extern int yyparse();             
+extern int yylex();               
+extern void yyerror(const char* s); 
+extern FILE* yyin; 
 
 int main(int argc, char* argv[]) {
     if (argc != 3) {
@@ -27,15 +27,15 @@ int main(int argc, char* argv[]) {
     FILE* fileInputPointer = fopen(inputFilePath, "r");
     if (fileInputPointer == nullptr) {
         cerr << "Error: Unable to open Latex File\n";
-        return 1; // Exit with an error code
+        return 1; 
     }
 
     // Open the output file in write mode
     ofstream outputFile(outputFilePath);
     if (!outputFile.is_open()) {
         cerr << "Error: Unable to open Markdown File\n";
-        fclose(fileInputPointer); // Close the input file before exiting
-        return 1; // Exit with an error code
+        fclose(fileInputPointer); 
+        return 1; 
     }
 
     // Set the lexer input to the input file
@@ -43,10 +43,10 @@ int main(int argc, char* argv[]) {
 
     // Start parsing
     cout << "Starting parsing..." << endl;
-    if (yyparse() != 0) { // Call the bison-generated parser function
+    if (yyparse() != 0) { 
         cerr << "Parsing failed." << endl;
-        fclose(fileInputPointer); // Close the input file before exiting
-        return 1; // Exit with an error code
+        fclose(fileInputPointer); 
+        return 1; 
     }
 
     cout << "Parsing succeeded." << endl;
@@ -54,8 +54,8 @@ int main(int argc, char* argv[]) {
     // Check if the root is correctly set
     if (!root) {
         cerr << "AST root is not set. Parsing may have failed." << endl;
-        fclose(fileInputPointer); // Close the input file before exiting
-        return 1; // Exit with an error code
+        fclose(fileInputPointer); 
+        return 1; 
     }
 
     // Print the AST to a file

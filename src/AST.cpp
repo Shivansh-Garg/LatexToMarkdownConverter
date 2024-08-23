@@ -1,21 +1,23 @@
 #include "AST.h"
+#include <iostream>
+using namespace std;
 
-void ASTNode::addChild(std::unique_ptr<ASTNode> child) {
-    children.push_back(std::move(child));
+void ASTNode::addChild(unique_ptr<ASTNode> child) {
+    children.push_back(move(child));
 }
 
-void printASTToFile(const ASTNode* node, std::ofstream& outFile, int indent) {
+void printASTToFile(const ASTNode* node, ofstream& outFile, int indent) {
     if (!node) return;
-    for (int i = 0; i < indent; ++i) outFile << "   ";
-    outFile << node->type << ": " << node->value << std::endl;
+    for (int i = 0; i < indent; ++i){outFile << "   ";}
+    outFile << node->type << ": " << node->value << endl;
     for (const auto& child : node->children) {
         printASTToFile(child.get(), outFile, indent + 1);
     }
 }
 
-std::string convertASTToMarkdown(const ASTNode* node) {
-    if (!node) return "";
-    std::string markdown;
+string convertASTToMarkdown(const ASTNode* node) {
+    if (node == nullptr) {return "";}
+    string markdown;
 
     if (node->type == "heading") {
         markdown += "# " + node->value;
@@ -32,11 +34,11 @@ std::string convertASTToMarkdown(const ASTNode* node) {
     } else if (node->type == "paragraph") {
         markdown += "\n";
     } else if (node->type == "codeblock") {
-        markdown += "```python\n" + node->value + "\n```\n";
+        markdown += "```python" + node->value + "```\n";
     } else if (node->type == "link") {
         markdown += node->value;
     } else if (node->type == "unordered_list" || node->type == "ordered_list") {
-        // do nothing.z
+        // do nothing otherwise will print 2 times
     } else if (node->type == "list_item") {
         markdown += node->value + "\n";
     } else if (node->type == "image") {
@@ -46,7 +48,7 @@ std::string convertASTToMarkdown(const ASTNode* node) {
     }else if (node->type == "newline") {
         markdown += "\n";
     }else if (node->type == "table") {
- 
+        // do nothing otherwise will print 2 times
     } else if (node->type == "table_item") {
         markdown += node->value + "\n";  
     } else if (node->type == "table_end"){
