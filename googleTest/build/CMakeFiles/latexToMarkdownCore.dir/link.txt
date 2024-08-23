@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblatexToMarkdownCore.a CMakeFiles/latexToMarkdownCore.dir/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/src/AST.cpp.o CMakeFiles/latexToMarkdownCore.dir/parser.cpp.o CMakeFiles/latexToMarkdownCore.dir/lexer.cpp.o
+/usr/bin/ranlib liblatexToMarkdownCore.a

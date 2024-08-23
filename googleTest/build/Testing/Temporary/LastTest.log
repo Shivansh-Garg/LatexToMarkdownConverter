@@ -1,0 +1,53 @@
+Start testing: Aug 23 22:23 IST
+----------------------------------------------------------
+1/1 Testing: RunTests
+1/1 Test: RunTests
+Command: "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/googleTest/build/tests"
+Directory: /mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/googleTest/build
+"RunTests" start time: Aug 23 22:23 IST
+Output:
+----------------------------------------------------------
+[==========] Running 6 tests from 6 test suites.
+[----------] Global test environment set-up.
+[----------] 1 test from ASTNodeTest1
+[ RUN      ] ASTNodeTest1.ConvertASTToMarkdown_Heading
+[       OK ] ASTNodeTest1.ConvertASTToMarkdown_Heading (0 ms)
+[----------] 1 test from ASTNodeTest1 (0 ms total)
+
+[----------] 1 test from ASTNodeTest2
+[ RUN      ] ASTNodeTest2.ConvertASTToMarkdown_Subheading
+[       OK ] ASTNodeTest2.ConvertASTToMarkdown_Subheading (0 ms)
+[----------] 1 test from ASTNodeTest2 (0 ms total)
+
+[----------] 1 test from ASTNodeTest3
+[ RUN      ] ASTNodeTest3.ConvertASTToMarkdown_Bold
+[       OK ] ASTNodeTest3.ConvertASTToMarkdown_Bold (0 ms)
+[----------] 1 test from ASTNodeTest3 (0 ms total)
+
+[----------] 1 test from ASTNodeTest4
+[ RUN      ] ASTNodeTest4.ConvertASTToMarkdown_Italics
+[       OK ] ASTNodeTest4.ConvertASTToMarkdown_Italics (0 ms)
+[----------] 1 test from ASTNodeTest4 (0 ms total)
+
+[----------] 1 test from ASTNodeTest5
+[ RUN      ] ASTNodeTest5.ConvertASTToMarkdown_UnorderedList
+[       OK ] ASTNodeTest5.ConvertASTToMarkdown_UnorderedList (0 ms)
+[----------] 1 test from ASTNodeTest5 (0 ms total)
+
+[----------] 1 test from ASTNodeTest6
+[ RUN      ] ASTNodeTest6.ConvertASTToMarkdown_Table
+[       OK ] ASTNodeTest6.ConvertASTToMarkdown_Table (0 ms)
+[----------] 1 test from ASTNodeTest6 (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 6 tests from 6 test suites ran. (0 ms total)
+[  PASSED  ] 6 tests.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"RunTests" end time: Aug 23 22:23 IST
+"RunTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Aug 23 22:23 IST

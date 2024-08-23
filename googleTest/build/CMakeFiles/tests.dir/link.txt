@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/tests.dir/test/test_main.cpp.o CMakeFiles/tests.dir/test/test_AST.cpp.o -o tests  lib/libgtest_main.a liblatexToMarkdownCore.a lib/libgtest.a 

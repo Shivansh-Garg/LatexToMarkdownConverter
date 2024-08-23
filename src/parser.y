@@ -7,7 +7,7 @@
 using namespace std;
 extern int yylex(void); 
 
-extern unique_ptr<ASTNode> root;
+unique_ptr<ASTNode> root = nullptr;
 void yyerror(const char* s);
 int countOrderNo = 0;
 int tableLineNo = 0;
@@ -57,12 +57,12 @@ page: sentences {
     ;
 
 sentences: 
-        /* Empty */ { $$ = new ASTNode("sentences", ""); }
-        | sentence sentences { 
-            $$ = $2;
-            $$->children.insert($$->children.begin(), unique_ptr<ASTNode>($1)); // Insert at the beginning
-        }
-        ;
+    /* Empty */ { $$ = new ASTNode("sentences", ""); }
+    | sentences sentence { 
+        $$ = $1;
+        $$->children.push_back(unique_ptr<ASTNode>($2)); // Add at the end
+    }
+;
 
 sentence: 
           headings  { $$ = $1; }
@@ -134,7 +134,7 @@ sametext:
     ;
 
 link: 
-          linkfirsthalf linksecondhalf {
+        linkfirsthalf linksecondhalf {
             $$ = new ASTNode("link", "[" + $2->value + "](" + $1->value + ")");
             delete $1;
             delete $2;

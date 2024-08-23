@@ -8,7 +8,7 @@
 using namespace std;
 
 // Global variables
-unique_ptr<ASTNode> root = nullptr;  
+extern unique_ptr<ASTNode> root;  
 extern int yyparse();             
 extern int yylex();               
 extern void yyerror(const char* s); 

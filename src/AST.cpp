@@ -8,8 +8,8 @@ void ASTNode::addChild(unique_ptr<ASTNode> child) {
 
 void printASTToFile(const ASTNode* node, ofstream& outFile, int indent) {
     if (!node) return;
-    for (int i = 0; i < indent; ++i){outFile << "   ";}
-    outFile << node->type << ": " << node->value << endl;
+    for (int i = 0; i < indent; ++i){outFile << "       ";}
+    outFile << node->type << endl;
     for (const auto& child : node->children) {
         printASTToFile(child.get(), outFile, indent + 1);
     }
