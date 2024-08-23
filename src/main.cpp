@@ -23,14 +23,14 @@ int main(int argc, char* argv[]) {
     const char* inputFilePath = argv[1];
     const char* outputFilePath = argv[2];
 
-    // Open the input file in read mode
+    // Open the input file
     FILE* fileInputPointer = fopen(inputFilePath, "r");
     if (fileInputPointer == nullptr) {
         cerr << "Error: Unable to open Latex File\n";
         return 1; 
     }
 
-    // Open the output file in write mode
+    // Open the output file 
     ofstream outputFile(outputFilePath);
     if (!outputFile.is_open()) {
         cerr << "Error: Unable to open Markdown File\n";
@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
         return 1; 
     }
 
-    // Set the lexer input to the input file
+    // Set lexer 
     yyin = fileInputPointer;
 
     // Start parsing
@@ -51,14 +51,14 @@ int main(int argc, char* argv[]) {
 
     cout << "Parsing succeeded." << endl;
 
-    // Check if the root is correctly set
+    // Check root
     if (!root) {
         cerr << "AST root is not set. Parsing may have failed." << endl;
         fclose(fileInputPointer); 
         return 1; 
     }
 
-    // Print the AST to a file
+    // Print AST
     ofstream astFile("astOutput.txt");
     if (astFile.is_open()) {
         printASTToFile(root.get(), astFile);
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
         cerr << "Error opening file to write AST." << endl;
     }
 
-    // Convert AST to Markdown and write it to the output file
+    // Converting AST to MARKDOWN
     string markdown = convertASTToMarkdown(root.get());
     if (outputFile.is_open()) {
         outputFile << markdown;
@@ -78,7 +78,6 @@ int main(int argc, char* argv[]) {
         cerr << "Error opening output file: " << outputFilePath << endl;
     }
 
-    // Close the input file
     fclose(fileInputPointer);
 
     return 0;
