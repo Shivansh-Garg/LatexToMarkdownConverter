@@ -2,7 +2,7 @@
 #include <fstream>
 #include <memory>
 #include <string>
-#include "parser.tab.h"
+#include "parser.hpp"
 #include "AST.h"
 
 using namespace std;

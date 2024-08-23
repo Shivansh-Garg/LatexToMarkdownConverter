@@ -1,0 +1,3 @@
+/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/CMakeFiles/latexToMarkdownConverter.dir
+/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/CMakeFiles/edit_cache.dir
+/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/CMakeFiles/rebuild_cache.dir

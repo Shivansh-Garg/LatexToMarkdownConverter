@@ -6,7 +6,7 @@ void ASTNode::addChild(std::unique_ptr<ASTNode> child) {
 
 void printASTToFile(const ASTNode* node, std::ofstream& outFile, int indent) {
     if (!node) return;
-    for (int i = 0; i < indent; ++i) outFile << "  ";
+    for (int i = 0; i < indent; ++i) outFile << "   ";
     outFile << node->type << ": " << node->value << std::endl;
     for (const auto& child : node->children) {
         printASTToFile(child.get(), outFile, indent + 1);

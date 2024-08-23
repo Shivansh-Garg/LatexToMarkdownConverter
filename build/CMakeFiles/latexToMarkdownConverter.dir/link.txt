@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/latexToMarkdownConverter.dir/src/main.cpp.o CMakeFiles/latexToMarkdownConverter.dir/src/AST.cpp.o CMakeFiles/latexToMarkdownConverter.dir/lexer.cpp.o CMakeFiles/latexToMarkdownConverter.dir/parser.cpp.o -o latexToMarkdownConverter 
