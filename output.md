@@ -30,8 +30,8 @@ For more information, visit the official IIT Delhi website: [IIT Delhi Official 
 
 
 1. Campus Facilities 
-2. Research Opportunities
-3. Alumni Achievements
+1. Research Opportunities
+1. Alumni Achievements
 
 
 |Department | Programs |
@@ -49,10 +49,10 @@ For more information, visit the official IIT Delhi website: [IIT Delhi Official 
 
 
 1. Established: 1961
-2. Location: Hauz Khas, New Delhi
-    3. a
-    4. b
-5. Programs: B.Tech, M.Tech, Ph.D., and more
+1. Location: Hauz Khas, New Delhi
+    1. a
+    1. b
+1. Programs: B.Tech, M.Tech, Ph.D., and more
 
 
  **_Indian Institute of Technology Delhi (IIT Delhi)_**
