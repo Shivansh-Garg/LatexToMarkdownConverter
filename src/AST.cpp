@@ -60,13 +60,11 @@ string convertASTToMarkdown(const ASTNode* node) {
     }else if (node->type == "table_separator"){
         markdown += node->value + "\n" ;
     }else if (node->type == "bold_italics"){
-        markdown += "**" + node->value + "**";
+        markdown += node->value;
     }else if (node->type == "italics_bold"){
         markdown += node->value;
     }else if (node->type == "italics_and_bold"){
         markdown +=  node->value ;
-    }else if (node->type == "bold_italics"){
-        markdown += node->value;
     }
 
     for (const auto& child : node->children) {

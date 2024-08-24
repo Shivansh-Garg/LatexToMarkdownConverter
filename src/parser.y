@@ -109,12 +109,12 @@ fonts:
         $$ = new ASTNode("paragraph", "\n");
     } 
     | BOLD CONTENT ITALICS commonPart ENDBRACE {
-        $$ = new ASTNode("bold_italics", "**" + *$2 + "** " + $4->value);
+        $$ = new ASTNode("bold_italics", " **" + *$2 + "**" + $4->value);
         delete $2;
         delete $4;
     }
     | BOLD CONTENT ITALICS commonPart CONTENT ENDBRACE {
-        $$ = new ASTNode("bold_italics", "**" + *$2 + "** " + $4->value + "**" + *$5 + "** ");
+        $$ = new ASTNode("bold_italics", " **" + *$2 + "**" + $4->value + " **" + *$5 + "**");
         delete $2;
         delete $4;
         delete $5;
@@ -124,17 +124,17 @@ fonts:
         delete $3;
     }
     | BOLD ITALICS commonPart CONTENT ENDBRACE {
-        $$ = new ASTNode("bold_italics", $3->value + "**" + *$4 + "** ");
+        $$ = new ASTNode("bold_italics", $3->value + " **" + *$4 + "**");
         delete $3;
         delete $4;
     }
     | ITALICS CONTENT BOLD commonPart ENDBRACE {
-        $$ = new ASTNode("italics_bold", "*" + *$2 + "* " + $4->value);
+        $$ = new ASTNode("italics_bold", " *" + *$2 + "*" + $4->value);
         delete $2;
         delete $4;
     }
     | ITALICS CONTENT BOLD commonPart CONTENT ENDBRACE {
-        $$ = new ASTNode("italics_bold", "*" + *$2 + "* " + $4->value + "*" + *$5 + "* ");
+        $$ = new ASTNode("italics_bold", " *" + *$2 + "*" + $4->value + " *" + *$5 + "*");
         delete $2;
         delete $4;
         delete $5;
@@ -144,7 +144,7 @@ fonts:
         delete $3;
     }
     | ITALICS BOLD commonPart CONTENT ENDBRACE {
-        $$ = new ASTNode("italics_bold", $3->value + "*" + *$4 + "* ");
+        $$ = new ASTNode("italics_bold", $3->value + " *" + *$4 + "*");
         delete $3;
         delete $4;
     }
@@ -152,7 +152,7 @@ fonts:
 
 commonPart: 
       CONTENT ENDBRACE {
-        $$ = new ASTNode("italics_and_bold", "***" + *$1 + "*** ");
+        $$ = new ASTNode("italics_and_bold", " **_" + *$1 + "_**");
         delete $1;
     }
     ;

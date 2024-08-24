@@ -69,6 +69,6 @@ Electrical Engineering & B.Tech, M.Tech, Ph.D. \\
     \item Programs: B.Tech, M.Tech, Ph.D., and more
 \end{enumerate}
 
-\textit{\textbf{Indian Institute of Technology Delhi (IIT Delhi)} is one of the premier engineering institutes in India.}
+\textit{\textbf{Indian Institute of Technology Delhi (IIT Delhi)}}
 
 \end{document}
