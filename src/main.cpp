@@ -1,3 +1,13 @@
+/**
+ * @file main.cpp
+ * @author Shivansh Garg(mcs242450@iitd.ac.in)
+ * @brief It sets up the lexer and parser, processes the LaTeX file to generate an AST, and checks for parsing errors.
+ * @version 0.1
+ * @date 2024-08-24
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #include <iostream>
 #include <fstream>
 #include <memory>
