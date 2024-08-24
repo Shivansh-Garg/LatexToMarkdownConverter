@@ -3,7 +3,7 @@
 **Overview** 
 The latexToMarkdownConverter is a C++ project that converts LaTeX documents into Markdown format. This project is built using Flex and Bison to generate a lexer and parser, which parse the LaTeX document, generate an abstract syntax tree (AST), and then convert the AST into Markdown.
 
-**Features** /par
+**Features** 
 Lexer: Tokenizes the LaTeX input using Flex. 
 Parser: Parses the tokenized input to generate an AST using Bison. 
 AST Generation: Represents the structure of the LaTeX document. 
