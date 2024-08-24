@@ -32,8 +32,9 @@ parser.y: Bison file for parsing and AST generation.
 **Build Instructions**
 
 *Clone the repository:*
+
+[git clone https://github.com/yourusername/latexToMarkdownConverter.git](https://github.com/Shivansh-Garg/LatexToMarkdownConverter.git)
 ```
-git clone https://github.com/yourusername/latexToMarkdownConverter.git
 cd latexToMarkdownConverter
 ```
 
