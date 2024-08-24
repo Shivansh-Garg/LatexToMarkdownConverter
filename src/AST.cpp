@@ -7,10 +7,14 @@ void ASTNode::addChild(unique_ptr<ASTNode> child) {
 }
 
 void printASTToFile(const ASTNode* node, ofstream& outFile, int indent) {
-    if (!node) return;
-    for (int i = 0; i < indent; ++i){outFile << "       ";}
+    if (node == nullptr) {
+        return;
+    }
+    for (int i = 0; i < indent; ++i){
+        outFile << "       ";
+    }
     outFile << node->type << endl;
-    for (const auto& child : node->children) {
+    for (const auto& child : node->children){
         printASTToFile(child.get(), outFile, indent + 1);
     }
 }
@@ -38,7 +42,7 @@ string convertASTToMarkdown(const ASTNode* node) {
     } else if (node->type == "link") {
         markdown += node->value;
     } else if (node->type == "unordered_list" || node->type == "ordered_list") {
-        // do nothing otherwise will print 2 times
+        /*do nothing*/
     } else if (node->type == "list_item") {
         markdown += node->value + "\n";
     } else if (node->type == "image") {
@@ -55,6 +59,14 @@ string convertASTToMarkdown(const ASTNode* node) {
         markdown += node->value ;
     }else if (node->type == "table_separator"){
         markdown += node->value + "\n" ;
+    }else if (node->type == "bold_italics"){
+        markdown += "**" + node->value + "**";
+    }else if (node->type == "italics_bold"){
+        markdown += node->value;
+    }else if (node->type == "italics_and_bold"){
+        markdown +=  node->value ;
+    }else if (node->type == "bold_italics"){
+        markdown += node->value;
     }
 
     for (const auto& child : node->children) {

@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 24 "src/parser.y"
+#line 26 "src/parser.y"
 
     #include <string>
     #include <algorithm>
@@ -105,7 +105,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 18 "src/parser.y"
+#line 20 "src/parser.y"
 
     ASTNode* node;
     string* stringValue;

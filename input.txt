@@ -48,6 +48,27 @@ Electrical Engineering & B.Tech, M.Tech, Ph.D. \\
 \hline
 \end{tabular}
 
+\begin{itemize}
+    \item Established: 1961
+    \item Location: Hauz Khas, New Delhi
+    \begin{itemize}
+        \item a
+        \item b
+    \end{itemize}
+    \item Programs: B.Tech, M.Tech, Ph.D., and more
+\end{itemize}
 
+
+\begin{enumerate}
+    \item Established: 1961
+    \item Location: Hauz Khas, New Delhi
+    \begin{enumerate}
+        \item a
+        \item b
+    \end{enumerate}
+    \item Programs: B.Tech, M.Tech, Ph.D., and more
+\end{enumerate}
+
+\textit{\textbf{Indian Institute of Technology Delhi (IIT Delhi)} is one of the premier engineering institutes in India.}
 
 \end{document}

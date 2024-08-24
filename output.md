@@ -40,5 +40,21 @@ For more information, visit the official IIT Delhi website: [IIT Delhi Official 
 |Electrical Engineering | B.Tech, M.Tech, Ph.D. |
 
 
+- Established: 1961
+- Location: Hauz Khas, New Delhi
+- a
+- b
+- Programs: B.Tech, M.Tech, Ph.D., and more
 
+
+
+1. Established: 1961
+2. Location: Hauz Khas, New Delhi
+
+3. a
+4. b
+5. Programs: B.Tech, M.Tech, Ph.D., and more
+
+
+***Indian Institute of Technology Delhi (IIT Delhi)*** ** is one of the premier engineering institutes in India.** 
 

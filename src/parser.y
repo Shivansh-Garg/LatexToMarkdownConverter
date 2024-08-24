@@ -4,7 +4,9 @@
 #include <iostream>
 #include <algorithm>
 #include "AST.h"
+
 using namespace std;
+
 extern int yylex(void); 
 
 unique_ptr<ASTNode> root = nullptr;
@@ -39,7 +41,7 @@ int tableColumnCount = 0;
 
 %type <node> page
 %type <node> sentences
-%type <node> sentence code headings fonts link lists
+%type <node> sentence code headings fonts link lists commonPart
 %type <node> unorderedListItems orderedListItems image
 %type <node> linkfirsthalf linksecondhalf imagefirsthalf imagesecondhalf ignore
 %type <node> table tablerows countTableColumn
@@ -60,7 +62,7 @@ sentences:
     /* Empty */ { $$ = new ASTNode("sentences", ""); }
     | sentences sentence { 
         $$ = $1;
-        $$->children.push_back(unique_ptr<ASTNode>($2)); // Add at the end
+        $$->children.push_back(unique_ptr<ASTNode>($2)); 
     }
 ;
 
@@ -91,23 +93,71 @@ headings:
             delete $2;
         }
         ;
-
 fonts: 
-          BOLD CONTENT ENDBRACE { 
-            $$ = new ASTNode("bold", *$2); 
-            delete $2; 
-        }
-        | ITALICS CONTENT ENDBRACE { 
-            $$ = new ASTNode("italics", *$2); 
-            delete $2; 
-        }
-        | HORIZONTALLINE { 
-            $$ = new ASTNode("horizontal_line", "---");
-        }
-        | PARAGRAPH { 
-            $$ = new ASTNode("paragraph", "\n");
-        }
-        ;
+    BOLD CONTENT ENDBRACE { 
+        $$ = new ASTNode("bold", *$2); 
+        delete $2; 
+    }
+    | ITALICS CONTENT ENDBRACE { 
+        $$ = new ASTNode("italics", *$2); 
+        delete $2; 
+    }
+    | HORIZONTALLINE { 
+        $$ = new ASTNode("horizontal_line", "---");
+    }
+    | PARAGRAPH { 
+        $$ = new ASTNode("paragraph", "\n");
+    } 
+    | BOLD CONTENT ITALICS commonPart ENDBRACE {
+        $$ = new ASTNode("bold_italics", "**" + *$2 + "** " + $4->value);
+        delete $2;
+        delete $4;
+    }
+    | BOLD CONTENT ITALICS commonPart CONTENT ENDBRACE {
+        $$ = new ASTNode("bold_italics", "**" + *$2 + "** " + $4->value + "**" + *$5 + "** ");
+        delete $2;
+        delete $4;
+        delete $5;
+    }
+    | BOLD ITALICS commonPart ENDBRACE {
+        $$ = new ASTNode("bold_italics", $3->value);
+        delete $3;
+    }
+    | BOLD ITALICS commonPart CONTENT ENDBRACE {
+        $$ = new ASTNode("bold_italics", $3->value + "**" + *$4 + "** ");
+        delete $3;
+        delete $4;
+    }
+    | ITALICS CONTENT BOLD commonPart ENDBRACE {
+        $$ = new ASTNode("italics_bold", "**" + *$2 + "** " + $4->value);
+        delete $2;
+        delete $4;
+    }
+    | ITALICS CONTENT BOLD commonPart CONTENT ENDBRACE {
+        $$ = new ASTNode("italics_bold", "**" + *$2 + "** " + $4->value + "** " + *$5 + "** ");
+        delete $2;
+        delete $4;
+        delete $5;
+    }
+    | ITALICS BOLD commonPart ENDBRACE {
+        $$ = new ASTNode("italics_bold", $3->value);
+        delete $3;
+    }
+    | ITALICS BOLD commonPart CONTENT ENDBRACE {
+        $$ = new ASTNode("italics_bold", $3->value + "**" + *$4 + "** ");
+        delete $3;
+        delete $4;
+    }
+    ;
+
+commonPart: 
+      CONTENT ENDBRACE {
+        $$ = new ASTNode("italics_and_bold", "***" + *$1 + "*** ");
+        delete $1;
+    }
+    ;
+
+
 
 code:
     CODEBLOCKSTART sametext CODEBLOCKEND {
@@ -159,27 +209,54 @@ unorderedListItems:
             $$->addChild(make_unique<ASTNode>("list_item", "-" + *$4));
             delete $4;
         }
+        | unorderedListItems CONTENT UNORDEREDLIST NEWLINE unorderedListItems CONTENT ENDUNORDEREDLIST NEWLINE {
+            $$ = $1;
+            auto nestedList = make_unique<ASTNode>("nested_unordered_list", "");
+            nestedList->addChild(unique_ptr<ASTNode>($5));
+            $$->addChild(make_unique<ASTNode>("nested_list_item", ""));
+            $$->children.back()->addChild(move(nestedList));
+        }
         | CONTENT ITEM CONTENT NEWLINE{
             $$ = new ASTNode("list_items");
             $$->addChild(make_unique<ASTNode>("list_item", "-" + *$3));
             delete $3;
         }
+        | CONTENT UNORDEREDLIST NEWLINE unorderedListItems CONTENT ENDUNORDEREDLIST NEWLINE {
+            $$ = new ASTNode("list_items");
+            auto nestedList = make_unique<ASTNode>("unordered_list", "");
+            nestedList->addChild(unique_ptr<ASTNode>($4));
+            $$->addChild(make_unique<ASTNode>("nested_list_item", ""));
+            $$->children.back()->addChild(move(nestedList));
+        }
         ;
 
-orderedListItems: 
-        orderedListItems CONTENT ITEM CONTENT NEWLINE  {
-            countOrderNo++;
+orderedListItems:
+        orderedListItems CONTENT ITEM CONTENT NEWLINE {
             $$ = $1;
-            $$->addChild(make_unique<ASTNode>("list_item", to_string(countOrderNo) + "." + *$4));
+            $$->addChild(make_unique<ASTNode>("list_item", to_string(++countOrderNo) + "." + *$4));
             delete $4;
         }
+        | orderedListItems  CONTENT ORDEREDLIST NEWLINE orderedListItems CONTENT ENDORDEREDLIST NEWLINE {
+            $$ = $1;
+            auto nestedList = make_unique<ASTNode>("nested_ordered_list", "");
+            nestedList->addChild(unique_ptr<ASTNode>($5));
+            $$->addChild(make_unique<ASTNode>("list_item", ""));
+            $$->children.back()->addChild(move(nestedList));
+        }
         | CONTENT ITEM CONTENT NEWLINE {
-            countOrderNo++;
             $$ = new ASTNode("list_items");
-            $$->addChild(make_unique<ASTNode>("list_item", to_string(countOrderNo) + "." + *$3));
+            $$->addChild(make_unique<ASTNode>("list_item", to_string(++countOrderNo) + "." + *$3));
             delete $3;
         }
+        | CONTENT ORDEREDLIST NEWLINE orderedListItems CONTENT ENDORDEREDLIST NEWLINE {
+            $$ = new ASTNode("list_items");
+            auto nestedList = make_unique<ASTNode>("ordered_list", "");
+            nestedList->addChild(unique_ptr<ASTNode>($4));
+            $$->addChild(make_unique<ASTNode>("list_item", ""));
+            $$->children.back()->addChild(move(nestedList));
+        }
         ;
+
 
 image: 
           imagefirsthalf imagesecondhalf { 

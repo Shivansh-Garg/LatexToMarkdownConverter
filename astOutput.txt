@@ -60,6 +60,32 @@ page
                             table_item
               newline
               newline
+              unordered_list
+                     list_items
+                            list_item
+                            list_item
+                            nested_list_item
+                                   nested_unordered_list
+                                          list_items
+                                                 list_item
+                                                 list_item
+                            list_item
+              newline
+              newline
+              newline
+              ordered_list
+                     list_items
+                            list_item
+                            list_item
+                            list_item
+                                   nested_ordered_list
+                                          list_items
+                                                 list_item
+                                                 list_item
+                            list_item
+              newline
+              newline
+              italics_bold
               newline
               newline
               ignore
