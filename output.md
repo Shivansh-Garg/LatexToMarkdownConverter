@@ -56,5 +56,5 @@ For more information, visit the official IIT Delhi website: [IIT Delhi Official 
 5. Programs: B.Tech, M.Tech, Ph.D., and more
 
 
-***Indian Institute of Technology Delhi (IIT Delhi)*** ** is one of the premier engineering institutes in India.** 
+***Indian Institute of Technology Delhi (IIT Delhi)***** is one of the premier engineering institutes in India.** 
 
