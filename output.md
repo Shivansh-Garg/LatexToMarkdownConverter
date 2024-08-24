@@ -29,7 +29,7 @@ For more information, visit the official IIT Delhi website: [IIT Delhi Official 
 - Programs: B.Tech, M.Tech, Ph.D., and more
 
 
-1. Campus Facilities 
+1. Campus Facilities
 1. Research Opportunities
 1. Alumni Achievements
 

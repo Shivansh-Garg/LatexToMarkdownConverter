@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 24 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/googleTest/../src/parser.y"
+#line 28 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/googleTest/../src/parser.y"
 
     #include <string>
     #include <algorithm>
@@ -105,7 +105,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 18 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/googleTest/../src/parser.y"
+#line 22 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/googleTest/../src/parser.y"
 
     ASTNode* node;
     string* stringValue;

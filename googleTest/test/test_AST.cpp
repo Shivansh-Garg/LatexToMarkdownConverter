@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "AST.h"
+#include <memory>
 #include <sstream>
 #include <iostream>
 using namespace std;
@@ -56,3 +57,12 @@ TEST(ASTNodeTest6, ConvertASTToMarkdownTable) {
     string expected = "| Column 1 | Column 2 |\n|----------------------|----------------------|\n| Data 1 | Data 2 |\n";
     EXPECT_EQ(markdown, expected);
 }
+
+TEST(ASTNodeTest7, ConvertASTToMarkdownItalicsBold) {
+    ASTNode root("italics_bold", "***This is italic and bold text***");
+    string markdown = convertASTToMarkdown(&root);
+    EXPECT_EQ(markdown, "***This is italic and bold text***");
+}
+
+
+
