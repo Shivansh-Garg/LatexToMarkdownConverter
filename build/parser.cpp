@@ -1412,7 +1412,7 @@ yyreduce:
   case 26: /* fonts: ITALICS CONTENT BOLD commonPart ENDBRACE  */
 #line 131 "src/parser.y"
                                                {
-        (yyval.node) = new ASTNode("italics_bold", "**" + *(yyvsp[-3].stringValue) + "** " + (yyvsp[-1].node)->value);
+        (yyval.node) = new ASTNode("italics_bold", "*" + *(yyvsp[-3].stringValue) + "* " + (yyvsp[-1].node)->value);
         delete (yyvsp[-3].stringValue);
         delete (yyvsp[-1].node);
     }
@@ -1422,7 +1422,7 @@ yyreduce:
   case 27: /* fonts: ITALICS CONTENT BOLD commonPart CONTENT ENDBRACE  */
 #line 136 "src/parser.y"
                                                        {
-        (yyval.node) = new ASTNode("italics_bold", "**" + *(yyvsp[-4].stringValue) + "** " + (yyvsp[-2].node)->value + "** " + *(yyvsp[-1].stringValue) + "** ");
+        (yyval.node) = new ASTNode("italics_bold", "*" + *(yyvsp[-4].stringValue) + "* " + (yyvsp[-2].node)->value + "*" + *(yyvsp[-1].stringValue) + "* ");
         delete (yyvsp[-4].stringValue);
         delete (yyvsp[-2].node);
         delete (yyvsp[-1].stringValue);
@@ -1442,7 +1442,7 @@ yyreduce:
   case 29: /* fonts: ITALICS BOLD commonPart CONTENT ENDBRACE  */
 #line 146 "src/parser.y"
                                                {
-        (yyval.node) = new ASTNode("italics_bold", (yyvsp[-2].node)->value + "**" + *(yyvsp[-1].stringValue) + "** ");
+        (yyval.node) = new ASTNode("italics_bold", (yyvsp[-2].node)->value + "*" + *(yyvsp[-1].stringValue) + "* ");
         delete (yyvsp[-2].node);
         delete (yyvsp[-1].stringValue);
     }
