@@ -10,10 +10,12 @@ using namespace std;
 extern int yylex(void); 
 
 unique_ptr<ASTNode> root = nullptr;
+int indentLevel = -4;
 void yyerror(const char* s);
 int countOrderNo = 0;
 int tableLineNo = 0;
 int tableColumnCount = 0;
+int countOrderNestedNo = 0;
 
 %}
 
@@ -59,7 +61,7 @@ page: sentences {
     ;
 
 sentences: 
-    /* Empty */ { $$ = new ASTNode("sentences", ""); }
+     { $$ = new ASTNode("sentences", ""); }
     | sentences sentence { 
         $$ = $1;
         $$->children.push_back(unique_ptr<ASTNode>($2)); 
@@ -168,18 +170,18 @@ code:
 
 sametext:
     NEWLINE sametext {
-        $$ = new std::string("\n" + *$2);
+        $$ = new string("\n" + *$2);
         delete $2;
     }
     | CONTENT sametext {
-        $$ = new std::string(*$1 + *$2);
+        $$ = new string(*$1 + *$2);
         delete $2;
     }
     | CONTENT {
-        $$ = new std::string(*$1);
+        $$ = new string(*$1);
     }
     | NEWLINE {
-        $$ = new std::string("\n");
+        $$ = new string("\n");
     }
     ;
 
@@ -193,20 +195,22 @@ link:
 
 lists: 
         UNORDEREDLIST NEWLINE unorderedListItems ENDUNORDEREDLIST {
+            indentLevel = -4;
             $$ = new ASTNode("unordered_list", "");
             $$->addChild(unique_ptr<ASTNode>($3));
         }
         | ORDEREDLIST NEWLINE orderedListItems ENDORDEREDLIST {
             countOrderNo = 0;
+            indentLevel = -4;
             $$ = new ASTNode("ordered_list", "");
             $$->addChild(unique_ptr<ASTNode>($3));
         }
         ;
 
 unorderedListItems: 
-        unorderedListItems CONTENT ITEM CONTENT NEWLINE{
+        unorderedListItems CONTENT ITEM CONTENT NEWLINE {
             $$ = $1;
-            $$->addChild(make_unique<ASTNode>("list_item", "-" + *$4));
+            $$->addChild(make_unique<ASTNode>("list_item", string(indentLevel, ' ') + "-" + *$4));
             delete $4;
         }
         | unorderedListItems CONTENT UNORDEREDLIST NEWLINE unorderedListItems CONTENT ENDUNORDEREDLIST NEWLINE {
@@ -215,10 +219,12 @@ unorderedListItems:
             nestedList->addChild(unique_ptr<ASTNode>($5));
             $$->addChild(make_unique<ASTNode>("nested_list_item", ""));
             $$->children.back()->addChild(move(nestedList));
+            indentLevel -= 4;
         }
-        | CONTENT ITEM CONTENT NEWLINE{
+        | CONTENT ITEM CONTENT NEWLINE {
+            indentLevel += 4;
             $$ = new ASTNode("list_items");
-            $$->addChild(make_unique<ASTNode>("list_item", "-" + *$3));
+            $$->addChild(make_unique<ASTNode>("list_item", string(indentLevel, ' ') + "-" + *$3));
             delete $3;
         }
         | CONTENT UNORDEREDLIST NEWLINE unorderedListItems CONTENT ENDUNORDEREDLIST NEWLINE {
@@ -227,25 +233,30 @@ unorderedListItems:
             nestedList->addChild(unique_ptr<ASTNode>($4));
             $$->addChild(make_unique<ASTNode>("nested_list_item", ""));
             $$->children.back()->addChild(move(nestedList));
+            indentLevel -= 4;
         }
-        ;
+    ;
+
 
 orderedListItems:
         orderedListItems CONTENT ITEM CONTENT NEWLINE {
             $$ = $1;
-            $$->addChild(make_unique<ASTNode>("list_item", to_string(++countOrderNo) + "." + *$4));
+            $$->addChild(make_unique<ASTNode>("list_item",string(indentLevel, ' ') + to_string(++countOrderNo) + "." + *$4));
             delete $4;
         }
-        | orderedListItems  CONTENT ORDEREDLIST NEWLINE orderedListItems CONTENT ENDORDEREDLIST NEWLINE {
+        | orderedListItems CONTENT ORDEREDLIST NEWLINE orderedListItems CONTENT ENDORDEREDLIST NEWLINE {
             $$ = $1;
             auto nestedList = make_unique<ASTNode>("nested_ordered_list", "");
             nestedList->addChild(unique_ptr<ASTNode>($5));
-            $$->addChild(make_unique<ASTNode>("list_item", ""));
+            $$->addChild(make_unique<ASTNode>("nested_list_item", ""));
             $$->children.back()->addChild(move(nestedList));
+            indentLevel -= 4;
+            countOrderNestedNo = 0;
         }
         | CONTENT ITEM CONTENT NEWLINE {
+            indentLevel += 4;
             $$ = new ASTNode("list_items");
-            $$->addChild(make_unique<ASTNode>("list_item", to_string(++countOrderNo) + "." + *$3));
+            $$->addChild(make_unique<ASTNode>("list_item", string(indentLevel, ' ') + to_string(++countOrderNo) + "." + *$3));
             delete $3;
         }
         | CONTENT ORDEREDLIST NEWLINE orderedListItems CONTENT ENDORDEREDLIST NEWLINE {
@@ -254,8 +265,9 @@ orderedListItems:
             nestedList->addChild(unique_ptr<ASTNode>($4));
             $$->addChild(make_unique<ASTNode>("list_item", ""));
             $$->children.back()->addChild(move(nestedList));
+            indentLevel -= 4;
         }
-        ;
+    ;
 
 
 image: 
@@ -307,7 +319,7 @@ tablerows :
         delete $1;
     }
     | TABLELINE NEWLINE{
-        $$ = new ASTNode("table_header");
+        $$ = new ASTNode("table_container");
         tableLineNo++;
         if (tableLineNo == 2) {
             string separatorLine = "|";

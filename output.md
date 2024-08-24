@@ -42,17 +42,16 @@ For more information, visit the official IIT Delhi website: [IIT Delhi Official 
 
 - Established: 1961
 - Location: Hauz Khas, New Delhi
-- a
-- b
+    - a
+    - b
 - Programs: B.Tech, M.Tech, Ph.D., and more
 
 
 
 1. Established: 1961
 2. Location: Hauz Khas, New Delhi
-
-3. a
-4. b
+    3. a
+    4. b
 5. Programs: B.Tech, M.Tech, Ph.D., and more
 
 

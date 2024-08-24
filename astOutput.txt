@@ -53,7 +53,7 @@ page
               newline
               newline
               table
-                     table_header
+                     table_container
                             table_item
                             table_separator
                             table_item
@@ -77,7 +77,7 @@ page
                      list_items
                             list_item
                             list_item
-                            list_item
+                            nested_list_item
                                    nested_ordered_list
                                           list_items
                                                  list_item

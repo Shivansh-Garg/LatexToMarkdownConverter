@@ -65,7 +65,7 @@ TABLECOLUMNS        [ |c]+
 {ENDBRACE}                                                   {printTokenDetails("ENDBRACE"); return ENDBRACE;}
 {STARTSQUAREBRACE}                                           {printTokenDetails("STARTSQUAREBRACE");return STARTSQUAREBRACE;}
 {ENDSQUAREBRACE}                                             {printTokenDetails("ENDSQUAREBRACE"); return ENDSQUAREBRACE;}
-[ \r]                                                      {/*ignore these characters */};
+[ \r]                                                        {/*ignore these characters */};
 {PERCENTAGE}{CONTENT}                                        {printTokenDetails("COMMENT");}
 {CONTENT}                                                    {printTokenDetails("CONTENT"); yylval.stringValue = new std::string(yytext); return CONTENT;}
 [\n]                                                         {printTokenDetails("NEWLINE");return NEWLINE;}

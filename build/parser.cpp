@@ -80,13 +80,15 @@ using namespace std;
 extern int yylex(void); 
 
 unique_ptr<ASTNode> root = nullptr;
+int indentLevel = -4;
 void yyerror(const char* s);
 int countOrderNo = 0;
 int tableLineNo = 0;
 int tableColumnCount = 0;
+int countOrderNestedNo = 0;
 
 
-#line 90 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 92 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -562,13 +564,13 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    55,    55,    62,    63,    70,    71,    72,    73,    74,
-      75,    76,    77,    78,    79,    83,    87,    91,    97,   101,
-     105,   108,   111,   116,   122,   126,   131,   136,   142,   146,
-     154,   163,   170,   174,   178,   181,   187,   195,   199,   207,
-     212,   219,   224,   234,   239,   246,   251,   262,   270,   276,
-     282,   290,   302,   309,   324,   325,   326,   327,   328,   329,
-     333,   337,   341,   345
+       0,    57,    57,    64,    65,    72,    73,    74,    75,    76,
+      77,    78,    79,    80,    81,    85,    89,    93,    99,   103,
+     107,   110,   113,   118,   124,   128,   133,   138,   144,   148,
+     156,   165,   172,   176,   180,   183,   189,   197,   202,   211,
+     216,   224,   230,   242,   247,   256,   262,   274,   282,   288,
+     294,   302,   314,   321,   336,   337,   338,   339,   340,   341,
+     345,   349,   353,   357
 };
 #endif
 
@@ -1225,428 +1227,437 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* page: sentences  */
-#line 55 "src/parser.y"
+#line 57 "src/parser.y"
                 { 
         root = make_unique<ASTNode>("page", "");
         root->addChild(unique_ptr<ASTNode>((yyvsp[0].node)));
     }
-#line 1234 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1236 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 3: /* sentences: %empty  */
-#line 62 "src/parser.y"
-                { (yyval.node) = new ASTNode("sentences", ""); }
-#line 1240 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 64 "src/parser.y"
+     { (yyval.node) = new ASTNode("sentences", ""); }
+#line 1242 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 4: /* sentences: sentences sentence  */
-#line 63 "src/parser.y"
+#line 65 "src/parser.y"
                          { 
         (yyval.node) = (yyvsp[-1].node);
         (yyval.node)->children.push_back(unique_ptr<ASTNode>((yyvsp[0].node))); 
     }
-#line 1249 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1251 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 5: /* sentence: headings  */
-#line 70 "src/parser.y"
+#line 72 "src/parser.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 1255 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1257 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 6: /* sentence: fonts  */
-#line 71 "src/parser.y"
+#line 73 "src/parser.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 1261 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1263 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 7: /* sentence: code  */
-#line 72 "src/parser.y"
+#line 74 "src/parser.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 1267 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1269 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 8: /* sentence: link  */
-#line 73 "src/parser.y"
+#line 75 "src/parser.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 1273 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1275 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 9: /* sentence: lists  */
-#line 74 "src/parser.y"
+#line 76 "src/parser.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 1279 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1281 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 10: /* sentence: image  */
-#line 75 "src/parser.y"
+#line 77 "src/parser.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 1285 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1287 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 11: /* sentence: table  */
-#line 76 "src/parser.y"
+#line 78 "src/parser.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 1291 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1293 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 12: /* sentence: ignore  */
-#line 77 "src/parser.y"
+#line 79 "src/parser.y"
                     { (yyval.node) = new ASTNode("ignore", ""); }
-#line 1297 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1299 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 13: /* sentence: NEWLINE  */
-#line 78 "src/parser.y"
+#line 80 "src/parser.y"
                     { (yyval.node) = new ASTNode("newline", "\n"); }
-#line 1303 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1305 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 14: /* sentence: CONTENT  */
-#line 79 "src/parser.y"
+#line 81 "src/parser.y"
                     { (yyval.node) = new ASTNode("content", *(yyvsp[0].stringValue)); delete (yyvsp[0].stringValue); }
-#line 1309 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1311 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 15: /* headings: SECTION CONTENT ENDBRACE  */
-#line 83 "src/parser.y"
+#line 85 "src/parser.y"
                                    { 
             (yyval.node) = new ASTNode("heading", *(yyvsp[-1].stringValue));
             delete (yyvsp[-1].stringValue);
         }
-#line 1318 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1320 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 16: /* headings: SUBSECTION CONTENT ENDBRACE  */
-#line 87 "src/parser.y"
+#line 89 "src/parser.y"
                                       { 
             (yyval.node) = new ASTNode("subheading", *(yyvsp[-1].stringValue));
             delete (yyvsp[-1].stringValue);
         }
-#line 1327 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1329 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 17: /* headings: SUBSUBSECTION CONTENT ENDBRACE  */
-#line 91 "src/parser.y"
+#line 93 "src/parser.y"
                                          { 
             (yyval.node) = new ASTNode("subsubheading", *(yyvsp[-1].stringValue));
             delete (yyvsp[-1].stringValue);
         }
-#line 1336 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1338 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 18: /* fonts: BOLD CONTENT ENDBRACE  */
-#line 97 "src/parser.y"
+#line 99 "src/parser.y"
                           { 
         (yyval.node) = new ASTNode("bold", *(yyvsp[-1].stringValue)); 
         delete (yyvsp[-1].stringValue); 
     }
-#line 1345 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1347 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 19: /* fonts: ITALICS CONTENT ENDBRACE  */
-#line 101 "src/parser.y"
+#line 103 "src/parser.y"
                                { 
         (yyval.node) = new ASTNode("italics", *(yyvsp[-1].stringValue)); 
         delete (yyvsp[-1].stringValue); 
     }
-#line 1354 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1356 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 20: /* fonts: HORIZONTALLINE  */
-#line 105 "src/parser.y"
+#line 107 "src/parser.y"
                      { 
         (yyval.node) = new ASTNode("horizontal_line", "---");
     }
-#line 1362 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1364 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 21: /* fonts: PARAGRAPH  */
-#line 108 "src/parser.y"
+#line 110 "src/parser.y"
                 { 
         (yyval.node) = new ASTNode("paragraph", "\n");
     }
-#line 1370 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1372 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 22: /* fonts: BOLD CONTENT ITALICS commonPart ENDBRACE  */
-#line 111 "src/parser.y"
+#line 113 "src/parser.y"
                                                {
         (yyval.node) = new ASTNode("bold_italics", " **" + *(yyvsp[-3].stringValue) + "**" + (yyvsp[-1].node)->value);
         delete (yyvsp[-3].stringValue);
         delete (yyvsp[-1].node);
     }
-#line 1380 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1382 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 23: /* fonts: BOLD CONTENT ITALICS commonPart CONTENT ENDBRACE  */
-#line 116 "src/parser.y"
+#line 118 "src/parser.y"
                                                        {
         (yyval.node) = new ASTNode("bold_italics", " **" + *(yyvsp[-4].stringValue) + "**" + (yyvsp[-2].node)->value + " **" + *(yyvsp[-1].stringValue) + "**");
         delete (yyvsp[-4].stringValue);
         delete (yyvsp[-2].node);
         delete (yyvsp[-1].stringValue);
     }
-#line 1391 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1393 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 24: /* fonts: BOLD ITALICS commonPart ENDBRACE  */
-#line 122 "src/parser.y"
+#line 124 "src/parser.y"
                                        {
         (yyval.node) = new ASTNode("bold_italics", (yyvsp[-1].node)->value);
         delete (yyvsp[-1].node);
     }
-#line 1400 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1402 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 25: /* fonts: BOLD ITALICS commonPart CONTENT ENDBRACE  */
-#line 126 "src/parser.y"
+#line 128 "src/parser.y"
                                                {
         (yyval.node) = new ASTNode("bold_italics", (yyvsp[-2].node)->value + " **" + *(yyvsp[-1].stringValue) + "**");
         delete (yyvsp[-2].node);
         delete (yyvsp[-1].stringValue);
     }
-#line 1410 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1412 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 26: /* fonts: ITALICS CONTENT BOLD commonPart ENDBRACE  */
-#line 131 "src/parser.y"
+#line 133 "src/parser.y"
                                                {
         (yyval.node) = new ASTNode("italics_bold", " *" + *(yyvsp[-3].stringValue) + "*" + (yyvsp[-1].node)->value);
         delete (yyvsp[-3].stringValue);
         delete (yyvsp[-1].node);
     }
-#line 1420 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1422 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 27: /* fonts: ITALICS CONTENT BOLD commonPart CONTENT ENDBRACE  */
-#line 136 "src/parser.y"
+#line 138 "src/parser.y"
                                                        {
         (yyval.node) = new ASTNode("italics_bold", " *" + *(yyvsp[-4].stringValue) + "*" + (yyvsp[-2].node)->value + " *" + *(yyvsp[-1].stringValue) + "*");
         delete (yyvsp[-4].stringValue);
         delete (yyvsp[-2].node);
         delete (yyvsp[-1].stringValue);
     }
-#line 1431 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1433 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 28: /* fonts: ITALICS BOLD commonPart ENDBRACE  */
-#line 142 "src/parser.y"
+#line 144 "src/parser.y"
                                        {
         (yyval.node) = new ASTNode("italics_bold", (yyvsp[-1].node)->value);
         delete (yyvsp[-1].node);
     }
-#line 1440 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1442 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 29: /* fonts: ITALICS BOLD commonPart CONTENT ENDBRACE  */
-#line 146 "src/parser.y"
+#line 148 "src/parser.y"
                                                {
         (yyval.node) = new ASTNode("italics_bold", (yyvsp[-2].node)->value + " *" + *(yyvsp[-1].stringValue) + "*");
         delete (yyvsp[-2].node);
         delete (yyvsp[-1].stringValue);
     }
-#line 1450 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1452 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 30: /* commonPart: CONTENT ENDBRACE  */
-#line 154 "src/parser.y"
+#line 156 "src/parser.y"
                        {
         (yyval.node) = new ASTNode("italics_and_bold", " **_" + *(yyvsp[-1].stringValue) + "_**");
         delete (yyvsp[-1].stringValue);
     }
-#line 1459 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1461 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 31: /* code: CODEBLOCKSTART sametext CODEBLOCKEND  */
-#line 163 "src/parser.y"
+#line 165 "src/parser.y"
                                          {
         (yyval.node) = new ASTNode("codeblock", *(yyvsp[-1].stringValue));
         delete (yyvsp[-1].stringValue);
     }
-#line 1468 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1470 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 32: /* sametext: NEWLINE sametext  */
-#line 170 "src/parser.y"
+#line 172 "src/parser.y"
                      {
-        (yyval.stringValue) = new std::string("\n" + *(yyvsp[0].stringValue));
+        (yyval.stringValue) = new string("\n" + *(yyvsp[0].stringValue));
         delete (yyvsp[0].stringValue);
     }
-#line 1477 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1479 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 33: /* sametext: CONTENT sametext  */
-#line 174 "src/parser.y"
+#line 176 "src/parser.y"
                        {
-        (yyval.stringValue) = new std::string(*(yyvsp[-1].stringValue) + *(yyvsp[0].stringValue));
+        (yyval.stringValue) = new string(*(yyvsp[-1].stringValue) + *(yyvsp[0].stringValue));
         delete (yyvsp[0].stringValue);
     }
-#line 1486 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1488 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 34: /* sametext: CONTENT  */
-#line 178 "src/parser.y"
+#line 180 "src/parser.y"
               {
-        (yyval.stringValue) = new std::string(*(yyvsp[0].stringValue));
+        (yyval.stringValue) = new string(*(yyvsp[0].stringValue));
     }
-#line 1494 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1496 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 35: /* sametext: NEWLINE  */
-#line 181 "src/parser.y"
+#line 183 "src/parser.y"
               {
-        (yyval.stringValue) = new std::string("\n");
+        (yyval.stringValue) = new string("\n");
     }
-#line 1502 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1504 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 36: /* link: linkfirsthalf linksecondhalf  */
-#line 187 "src/parser.y"
+#line 189 "src/parser.y"
                                      {
             (yyval.node) = new ASTNode("link", "[" + (yyvsp[0].node)->value + "](" + (yyvsp[-1].node)->value + ")");
             delete (yyvsp[-1].node);
             delete (yyvsp[0].node);
         }
-#line 1512 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1514 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 37: /* lists: UNORDEREDLIST NEWLINE unorderedListItems ENDUNORDEREDLIST  */
-#line 195 "src/parser.y"
+#line 197 "src/parser.y"
                                                                   {
+            indentLevel = -4;
             (yyval.node) = new ASTNode("unordered_list", "");
             (yyval.node)->addChild(unique_ptr<ASTNode>((yyvsp[-1].node)));
         }
-#line 1521 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1524 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 38: /* lists: ORDEREDLIST NEWLINE orderedListItems ENDORDEREDLIST  */
-#line 199 "src/parser.y"
+#line 202 "src/parser.y"
                                                               {
             countOrderNo = 0;
+            indentLevel = -4;
             (yyval.node) = new ASTNode("ordered_list", "");
             (yyval.node)->addChild(unique_ptr<ASTNode>((yyvsp[-1].node)));
         }
-#line 1531 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1535 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 39: /* unorderedListItems: unorderedListItems CONTENT ITEM CONTENT NEWLINE  */
-#line 207 "src/parser.y"
-                                                       {
+#line 211 "src/parser.y"
+                                                        {
             (yyval.node) = (yyvsp[-4].node);
-            (yyval.node)->addChild(make_unique<ASTNode>("list_item", "-" + *(yyvsp[-1].stringValue)));
+            (yyval.node)->addChild(make_unique<ASTNode>("list_item", string(indentLevel, ' ') + "-" + *(yyvsp[-1].stringValue)));
             delete (yyvsp[-1].stringValue);
         }
-#line 1541 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1545 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 40: /* unorderedListItems: unorderedListItems CONTENT UNORDEREDLIST NEWLINE unorderedListItems CONTENT ENDUNORDEREDLIST NEWLINE  */
-#line 212 "src/parser.y"
+#line 216 "src/parser.y"
                                                                                                                {
             (yyval.node) = (yyvsp[-7].node);
             auto nestedList = make_unique<ASTNode>("nested_unordered_list", "");
             nestedList->addChild(unique_ptr<ASTNode>((yyvsp[-3].node)));
             (yyval.node)->addChild(make_unique<ASTNode>("nested_list_item", ""));
             (yyval.node)->children.back()->addChild(move(nestedList));
+            indentLevel -= 4;
         }
-#line 1553 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1558 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 41: /* unorderedListItems: CONTENT ITEM CONTENT NEWLINE  */
-#line 219 "src/parser.y"
-                                      {
+#line 224 "src/parser.y"
+                                       {
+            indentLevel += 4;
             (yyval.node) = new ASTNode("list_items");
-            (yyval.node)->addChild(make_unique<ASTNode>("list_item", "-" + *(yyvsp[-1].stringValue)));
+            (yyval.node)->addChild(make_unique<ASTNode>("list_item", string(indentLevel, ' ') + "-" + *(yyvsp[-1].stringValue)));
             delete (yyvsp[-1].stringValue);
         }
-#line 1563 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1569 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 42: /* unorderedListItems: CONTENT UNORDEREDLIST NEWLINE unorderedListItems CONTENT ENDUNORDEREDLIST NEWLINE  */
-#line 224 "src/parser.y"
+#line 230 "src/parser.y"
                                                                                             {
             (yyval.node) = new ASTNode("list_items");
             auto nestedList = make_unique<ASTNode>("unordered_list", "");
             nestedList->addChild(unique_ptr<ASTNode>((yyvsp[-3].node)));
             (yyval.node)->addChild(make_unique<ASTNode>("nested_list_item", ""));
             (yyval.node)->children.back()->addChild(move(nestedList));
+            indentLevel -= 4;
         }
-#line 1575 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1582 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 43: /* orderedListItems: orderedListItems CONTENT ITEM CONTENT NEWLINE  */
-#line 234 "src/parser.y"
+#line 242 "src/parser.y"
                                                       {
             (yyval.node) = (yyvsp[-4].node);
-            (yyval.node)->addChild(make_unique<ASTNode>("list_item", to_string(++countOrderNo) + "." + *(yyvsp[-1].stringValue)));
+            (yyval.node)->addChild(make_unique<ASTNode>("list_item",string(indentLevel, ' ') + to_string(++countOrderNo) + "." + *(yyvsp[-1].stringValue)));
             delete (yyvsp[-1].stringValue);
         }
-#line 1585 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1592 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 44: /* orderedListItems: orderedListItems CONTENT ORDEREDLIST NEWLINE orderedListItems CONTENT ENDORDEREDLIST NEWLINE  */
-#line 239 "src/parser.y"
-                                                                                                        {
+#line 247 "src/parser.y"
+                                                                                                       {
             (yyval.node) = (yyvsp[-7].node);
             auto nestedList = make_unique<ASTNode>("nested_ordered_list", "");
             nestedList->addChild(unique_ptr<ASTNode>((yyvsp[-3].node)));
-            (yyval.node)->addChild(make_unique<ASTNode>("list_item", ""));
+            (yyval.node)->addChild(make_unique<ASTNode>("nested_list_item", ""));
             (yyval.node)->children.back()->addChild(move(nestedList));
+            indentLevel -= 4;
+            countOrderNestedNo = 0;
         }
-#line 1597 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1606 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 45: /* orderedListItems: CONTENT ITEM CONTENT NEWLINE  */
-#line 246 "src/parser.y"
+#line 256 "src/parser.y"
                                        {
+            indentLevel += 4;
             (yyval.node) = new ASTNode("list_items");
-            (yyval.node)->addChild(make_unique<ASTNode>("list_item", to_string(++countOrderNo) + "." + *(yyvsp[-1].stringValue)));
+            (yyval.node)->addChild(make_unique<ASTNode>("list_item", string(indentLevel, ' ') + to_string(++countOrderNo) + "." + *(yyvsp[-1].stringValue)));
             delete (yyvsp[-1].stringValue);
         }
-#line 1607 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1617 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 46: /* orderedListItems: CONTENT ORDEREDLIST NEWLINE orderedListItems CONTENT ENDORDEREDLIST NEWLINE  */
-#line 251 "src/parser.y"
+#line 262 "src/parser.y"
                                                                                       {
             (yyval.node) = new ASTNode("list_items");
             auto nestedList = make_unique<ASTNode>("ordered_list", "");
             nestedList->addChild(unique_ptr<ASTNode>((yyvsp[-3].node)));
             (yyval.node)->addChild(make_unique<ASTNode>("list_item", ""));
             (yyval.node)->children.back()->addChild(move(nestedList));
+            indentLevel -= 4;
         }
-#line 1619 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1630 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 47: /* image: imagefirsthalf imagesecondhalf  */
-#line 262 "src/parser.y"
+#line 274 "src/parser.y"
                                          { 
             (yyval.node) = new ASTNode("image", (yyvsp[-1].node)->value + (yyvsp[0].node)->value);
             delete (yyvsp[-1].node);
             delete (yyvsp[0].node);
         }
-#line 1629 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1640 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 48: /* table: TABLEBEGIN countTableColumn NEWLINE tablerows TABLEEND  */
-#line 270 "src/parser.y"
+#line 282 "src/parser.y"
                                                               {
             (yyval.node) = new ASTNode("table", "");
             (yyval.node)->addChild(unique_ptr<ASTNode>((yyvsp[-1].node)));
         }
-#line 1638 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1649 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 49: /* countTableColumn: TABLECOLUMNS  */
-#line 276 "src/parser.y"
+#line 288 "src/parser.y"
                   {
         tableColumnCount = count((yyvsp[0].stringValue)->begin(), (yyvsp[0].stringValue)->end(), 'c') ;  
     }
-#line 1646 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1657 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 50: /* tablerows: tablerows CONTENT BACKSLASH BACKSLASH NEWLINE  */
-#line 282 "src/parser.y"
+#line 294 "src/parser.y"
                                                       {
         string modifiedContent = *(yyvsp[-3].stringValue);
         replace(modifiedContent.begin(), modifiedContent.end(), '&', '|');
@@ -1655,11 +1666,11 @@ yyreduce:
         (yyval.node)->addChild(make_unique<ASTNode>("table_item", "|" +  modifiedContent + "|"));
         delete (yyvsp[-3].stringValue);
     }
-#line 1659 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1670 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 51: /* tablerows: tablerows TABLELINE NEWLINE  */
-#line 290 "src/parser.y"
+#line 302 "src/parser.y"
                                   {
         (yyval.node) = (yyvsp[-2].node);
         tableLineNo++;
@@ -1672,11 +1683,11 @@ yyreduce:
         }
         
     }
-#line 1676 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1687 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 52: /* tablerows: CONTENT BACKSLASH BACKSLASH NEWLINE  */
-#line 302 "src/parser.y"
+#line 314 "src/parser.y"
                                           {
         string modifiedContent = *(yyvsp[-3].stringValue);
         replace(modifiedContent.begin(), modifiedContent.end(), '&', '|');
@@ -1684,13 +1695,13 @@ yyreduce:
         (yyval.node)->addChild(make_unique<ASTNode>("table_item", "|" +  modifiedContent + "|"));
         delete (yyvsp[-3].stringValue);
     }
-#line 1688 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1699 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 53: /* tablerows: TABLELINE NEWLINE  */
-#line 309 "src/parser.y"
+#line 321 "src/parser.y"
                        {
-        (yyval.node) = new ASTNode("table_header");
+        (yyval.node) = new ASTNode("table_container");
         tableLineNo++;
         if (tableLineNo == 2) {
             string separatorLine = "|";
@@ -1700,71 +1711,71 @@ yyreduce:
             (yyval.node)->addChild(make_unique<ASTNode>("table_separator", separatorLine));  
         }
     }
-#line 1704 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1715 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 54: /* ignore: START NEWLINE  */
-#line 324 "src/parser.y"
+#line 336 "src/parser.y"
                         { (yyval.node) = new ASTNode("ignore", ""); }
-#line 1710 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1721 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 55: /* ignore: PACKAGES NEWLINE  */
-#line 325 "src/parser.y"
+#line 337 "src/parser.y"
                            { (yyval.node) = new ASTNode("ignore", ""); }
-#line 1716 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1727 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 56: /* ignore: DATE NEWLINE  */
-#line 326 "src/parser.y"
+#line 338 "src/parser.y"
                        { (yyval.node) = new ASTNode("ignore", ""); }
-#line 1722 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1733 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 57: /* ignore: DOCUMENT NEWLINE  */
-#line 327 "src/parser.y"
+#line 339 "src/parser.y"
                            { (yyval.node) = new ASTNode("ignore", ""); }
-#line 1728 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1739 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 58: /* ignore: TITLE NEWLINE  */
-#line 328 "src/parser.y"
+#line 340 "src/parser.y"
                         { (yyval.node) = new ASTNode("ignore", ""); }
-#line 1734 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1745 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 59: /* ignore: END NEWLINE  */
-#line 329 "src/parser.y"
+#line 341 "src/parser.y"
                       { (yyval.node) = new ASTNode("ignore", ""); }
-#line 1740 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1751 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 60: /* linkfirsthalf: HYPERLINK CONTENT ENDBRACE  */
-#line 333 "src/parser.y"
+#line 345 "src/parser.y"
                                      { (yyval.node) = new ASTNode("hyperlink", *(yyvsp[-1].stringValue)); delete (yyvsp[-1].stringValue); }
-#line 1746 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1757 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 61: /* linksecondhalf: STARTBRACE CONTENT ENDBRACE  */
-#line 337 "src/parser.y"
+#line 349 "src/parser.y"
                                       { (yyval.node) = new ASTNode("link_text", *(yyvsp[-1].stringValue)); delete (yyvsp[-1].stringValue); }
-#line 1752 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1763 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 62: /* imagefirsthalf: IMAGESTART CONTENT TEXTWIDTH ENDSQUAREBRACE  */
-#line 341 "src/parser.y"
+#line 353 "src/parser.y"
                                                       { (yyval.node) = new ASTNode("image_desc", "![IMAGE]"); }
-#line 1758 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1769 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
   case 63: /* imagesecondhalf: STARTBRACE CONTENT ENDBRACE  */
-#line 345 "src/parser.y"
+#line 357 "src/parser.y"
                                       { (yyval.node) = new ASTNode("image_url", "(" + *(yyvsp[-1].stringValue) + ")"); delete (yyvsp[-1].stringValue); }
-#line 1764 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1775 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
     break;
 
 
-#line 1768 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
+#line 1779 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
 
       default: break;
     }
@@ -1957,7 +1968,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 348 "src/parser.y"
+#line 360 "src/parser.y"
 
 
 void yyerror(const char* s) {
