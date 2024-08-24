@@ -241,7 +241,7 @@ unorderedListItems:
 orderedListItems:
         orderedListItems CONTENT ITEM CONTENT NEWLINE {
             $$ = $1;
-            $$->addChild(make_unique<ASTNode>("list_item",string(indentLevel, ' ') + to_string(++countOrderNo) + "." + *$4));
+            $$->addChild(make_unique<ASTNode>("list_item",string(indentLevel, ' ') + /*to_string(++countOrderNo)*/ + "1." + *$4));
             delete $4;
         }
         | orderedListItems CONTENT ORDEREDLIST NEWLINE orderedListItems CONTENT ENDORDEREDLIST NEWLINE {
@@ -256,7 +256,7 @@ orderedListItems:
         | CONTENT ITEM CONTENT NEWLINE {
             indentLevel += 4;
             $$ = new ASTNode("list_items");
-            $$->addChild(make_unique<ASTNode>("list_item", string(indentLevel, ' ') + to_string(++countOrderNo) + "." + *$3));
+            $$->addChild(make_unique<ASTNode>("list_item", string(indentLevel, ' ') + /*to_string(++countOrderNo)*/ + "1." + *$3));
             delete $3;
         }
         | CONTENT ORDEREDLIST NEWLINE orderedListItems CONTENT ENDORDEREDLIST NEWLINE {

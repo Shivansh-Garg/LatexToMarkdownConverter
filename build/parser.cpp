@@ -1585,7 +1585,7 @@ yyreduce:
 #line 242 "src/parser.y"
                                                       {
             (yyval.node) = (yyvsp[-4].node);
-            (yyval.node)->addChild(make_unique<ASTNode>("list_item",string(indentLevel, ' ') + to_string(++countOrderNo) + "." + *(yyvsp[-1].stringValue)));
+            (yyval.node)->addChild(make_unique<ASTNode>("list_item",string(indentLevel, ' ') + /*to_string(++countOrderNo)*/ + "1." + *(yyvsp[-1].stringValue)));
             delete (yyvsp[-1].stringValue);
         }
 #line 1592 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
@@ -1610,7 +1610,7 @@ yyreduce:
                                        {
             indentLevel += 4;
             (yyval.node) = new ASTNode("list_items");
-            (yyval.node)->addChild(make_unique<ASTNode>("list_item", string(indentLevel, ' ') + to_string(++countOrderNo) + "." + *(yyvsp[-1].stringValue)));
+            (yyval.node)->addChild(make_unique<ASTNode>("list_item", string(indentLevel, ' ') + /*to_string(++countOrderNo)*/ + "1." + *(yyvsp[-1].stringValue)));
             delete (yyvsp[-1].stringValue);
         }
 #line 1617 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/parser.cpp"
