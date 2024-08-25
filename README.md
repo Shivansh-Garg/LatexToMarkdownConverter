@@ -21,7 +21,7 @@ Markdown Conversion: Converts the AST into a Markdown format.
 - Tables
 - Nested Lists
 
-**Directory** \par
+**Directory** 
 src/: Contains all the source files for the project. 
 main.cpp: Entry point of the application.
 AST.cpp: Implementation of the AST-related functions. 
