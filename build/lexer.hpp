@@ -466,7 +466,7 @@ extern int yylex (void);
 #undef yyTABLES_NAME
 #endif
 
-#line 77 "src/lexer.l"
+#line 78 "src/lexer.l"
 
 
 #line 473 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/lexer.hpp"

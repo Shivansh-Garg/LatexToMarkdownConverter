@@ -30,29 +30,29 @@ PERCENTAGE          [\%]
 TABLECOLUMNS        [ |c]+
 
 %%
-{BACKSLASH}begin{STARTBRACE}document{ENDBRACE}               {printTokenDetails("START"); return START;}
+{BACKSLASH}begin{STARTBRACE}document{ENDBRACE}               {printTokenDetails("START"); return START;}  // these are all the tokens which will eventually be ignored
 {BACKSLASH}title{STARTBRACE}{CONTENT}{ENDBRACE}              {printTokenDetails("TITLE"); return TITLE;}
 {BACKSLASH}usepackage{STARTBRACE}{CONTENT}{ENDBRACE}         {printTokenDetails("PACKAGES"); return PACKAGES;}
 {BACKSLASH}documentclass{STARTBRACE}{CONTENT}{ENDBRACE}      {printTokenDetails("DOCUMENT"); return DOCUMENT;}
 {BACKSLASH}date{STARTBRACE}{CONTENT}{ENDBRACE}               {printTokenDetails("DATE"); return DATE;}
 {BACKSLASH}end{STARTBRACE}document{ENDBRACE}                 {printTokenDetails("END"); return END;}
 
-{BACKSLASH}section{STARTBRACE}                               {printTokenDetails("SECTION"); return SECTION;}
+{BACKSLASH}section{STARTBRACE}                               {printTokenDetails("SECTION"); return SECTION;}   // these tokens are for headings and fonts
 {BACKSLASH}subsection{STARTBRACE}                            {printTokenDetails("SUBSECTION"); return SUBSECTION;}
 {BACKSLASH}subsubsection{STARTBRACE}                         {printTokenDetails("SUBSUBSECTION"); return SUBSUBSECTION;}
 {BACKSLASH}textit{STARTBRACE}                                {printTokenDetails("ITALICS"); return ITALICS;}
 {BACKSLASH}textbf{STARTBRACE}                                {printTokenDetails("BOLD"); return BOLD;}
 
-{BACKSLASH}begin{STARTBRACE}verbatim{ENDBRACE}               {printTokenDetails("CODEBLOCKSTART"); return CODEBLOCKSTART;}
+{BACKSLASH}begin{STARTBRACE}verbatim{ENDBRACE}               {printTokenDetails("CODEBLOCKSTART"); return CODEBLOCKSTART;} // these tokens are for Images, verbatim and link
 {BACKSLASH}href{STARTBRACE}                                  {printTokenDetails("HYPERLINK"); return HYPERLINK;}
 {BACKSLASH}end{STARTBRACE}verbatim{ENDBRACE}                 {printTokenDetails("CODEBLOCKEND");return CODEBLOCKEND;}
 {BACKSLASH}includegraphics{STARTSQUAREBRACE}                 {printTokenDetails("IMAGESTART"); return IMAGESTART;}
 {BACKSLASH}textwidth                                         {printTokenDetails("TEXTWIDTH"); return TEXTWIDTH;}
 
-{BACKSLASH}hrule                                             {printTokenDetails("HORIZONTALLINE");return HORIZONTALLINE;}
+{BACKSLASH}hrule                                             {printTokenDetails("HORIZONTALLINE");return HORIZONTALLINE;} // these consist of para and horizontal line
 {BACKSLASH}par                                               {printTokenDetails("PARAGRAPH");return PARAGRAPH;}
 
-{BACKSLASH}begin{STARTBRACE}itemize{ENDBRACE}                {printTokenDetails("UNORDEREDLIST");return UNORDEREDLIST;}
+{BACKSLASH}begin{STARTBRACE}itemize{ENDBRACE}                {printTokenDetails("UNORDEREDLIST");return UNORDEREDLIST;} // these tokens are to implement list and table
 {BACKSLASH}item                                              {printTokenDetails("ITEM");return ITEM;}
 {BACKSLASH}end{STARTBRACE}itemize{ENDBRACE}                  {printTokenDetails("ENDUNORDEREDLIST");return ENDUNORDEREDLIST;}
 {BACKSLASH}begin{STARTBRACE}enumerate{ENDBRACE}              {printTokenDetails("ORDEREDLIST"); return ORDEREDLIST;}
@@ -62,7 +62,7 @@ TABLECOLUMNS        [ |c]+
 {BACKSLASH}hline                                             {printTokenDetails("TABLELINE"); return TABLELINE;}
 {BACKSLASH}end{STARTBRACE}tabular{ENDBRACE}                  {printTokenDetails("TABLEEND"); return TABLEEND;}   
 
-{STARTBRACE}                                                 {printTokenDetails("STARTBRACE"); return STARTBRACE;}
+{STARTBRACE}                                                 {printTokenDetails("STARTBRACE"); return STARTBRACE;}  // these are usually consist of single tokens
 {ENDBRACE}                                                   {printTokenDetails("ENDBRACE"); return ENDBRACE;}
 {STARTSQUAREBRACE}                                           {printTokenDetails("STARTSQUAREBRACE");return STARTSQUAREBRACE;}
 {ENDSQUAREBRACE}                                             {printTokenDetails("ENDSQUAREBRACE"); return ENDSQUAREBRACE;}
@@ -87,7 +87,7 @@ int main(){
     return 0;
 }*/
 
-
+/* used for debugging */
 void printTokenDetails(const char* s) {
     if (s != NULL) {
         /*size_t length = strlen(yytext);  // Compute the length of the text holding

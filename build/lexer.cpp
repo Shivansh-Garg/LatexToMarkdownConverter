@@ -591,7 +591,7 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "src/lexer.l"
-#line 2 "src/lexer.l"
+#line 3 "src/lexer.l"
     #include <stdio.h>
     #include <string.h>
     #include "parser.hpp"
@@ -818,7 +818,7 @@ YY_DECL
 		}
 
 	{
-#line 31 "src/lexer.l"
+#line 32 "src/lexer.l"
 
 #line 824 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/lexer.cpp"
 
@@ -879,193 +879,193 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 32 "src/lexer.l"
-{printTokenDetails("START"); return START;}
+#line 33 "src/lexer.l"
+{printTokenDetails("START"); return START;}  // these are all the tokens which will eventually be ignored
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 33 "src/lexer.l"
+#line 34 "src/lexer.l"
 {printTokenDetails("TITLE"); return TITLE;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 34 "src/lexer.l"
+#line 35 "src/lexer.l"
 {printTokenDetails("PACKAGES"); return PACKAGES;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 35 "src/lexer.l"
+#line 36 "src/lexer.l"
 {printTokenDetails("DOCUMENT"); return DOCUMENT;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 36 "src/lexer.l"
+#line 37 "src/lexer.l"
 {printTokenDetails("DATE"); return DATE;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 37 "src/lexer.l"
+#line 38 "src/lexer.l"
 {printTokenDetails("END"); return END;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 39 "src/lexer.l"
-{printTokenDetails("SECTION"); return SECTION;}
+#line 40 "src/lexer.l"
+{printTokenDetails("SECTION"); return SECTION;}   // these tokens are for headings and fonts
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 40 "src/lexer.l"
+#line 41 "src/lexer.l"
 {printTokenDetails("SUBSECTION"); return SUBSECTION;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 41 "src/lexer.l"
+#line 42 "src/lexer.l"
 {printTokenDetails("SUBSUBSECTION"); return SUBSUBSECTION;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 42 "src/lexer.l"
+#line 43 "src/lexer.l"
 {printTokenDetails("ITALICS"); return ITALICS;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 43 "src/lexer.l"
+#line 44 "src/lexer.l"
 {printTokenDetails("BOLD"); return BOLD;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 45 "src/lexer.l"
-{printTokenDetails("CODEBLOCKSTART"); return CODEBLOCKSTART;}
+#line 46 "src/lexer.l"
+{printTokenDetails("CODEBLOCKSTART"); return CODEBLOCKSTART;} // these tokens are for Images, verbatim and link
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 46 "src/lexer.l"
+#line 47 "src/lexer.l"
 {printTokenDetails("HYPERLINK"); return HYPERLINK;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 47 "src/lexer.l"
+#line 48 "src/lexer.l"
 {printTokenDetails("CODEBLOCKEND");return CODEBLOCKEND;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 48 "src/lexer.l"
+#line 49 "src/lexer.l"
 {printTokenDetails("IMAGESTART"); return IMAGESTART;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 49 "src/lexer.l"
+#line 50 "src/lexer.l"
 {printTokenDetails("TEXTWIDTH"); return TEXTWIDTH;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 51 "src/lexer.l"
-{printTokenDetails("HORIZONTALLINE");return HORIZONTALLINE;}
+#line 52 "src/lexer.l"
+{printTokenDetails("HORIZONTALLINE");return HORIZONTALLINE;} // these consist of para and horizontal line
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 52 "src/lexer.l"
+#line 53 "src/lexer.l"
 {printTokenDetails("PARAGRAPH");return PARAGRAPH;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 54 "src/lexer.l"
-{printTokenDetails("UNORDEREDLIST");return UNORDEREDLIST;}
+#line 55 "src/lexer.l"
+{printTokenDetails("UNORDEREDLIST");return UNORDEREDLIST;} // these tokens are to implement list and table
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 55 "src/lexer.l"
+#line 56 "src/lexer.l"
 {printTokenDetails("ITEM");return ITEM;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 56 "src/lexer.l"
+#line 57 "src/lexer.l"
 {printTokenDetails("ENDUNORDEREDLIST");return ENDUNORDEREDLIST;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 57 "src/lexer.l"
+#line 58 "src/lexer.l"
 {printTokenDetails("ORDEREDLIST"); return ORDEREDLIST;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 58 "src/lexer.l"
+#line 59 "src/lexer.l"
 {printTokenDetails("ENDORDEREDLIST"); return ENDORDEREDLIST;}   
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 59 "src/lexer.l"
+#line 60 "src/lexer.l"
 {printTokenDetails("TABLEBEGIN"); return TABLEBEGIN;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 60 "src/lexer.l"
+#line 61 "src/lexer.l"
 {printTokenDetails("TABLECOLUMNS");yylval.stringValue = new std::string(yytext); return TABLECOLUMNS;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 61 "src/lexer.l"
+#line 62 "src/lexer.l"
 {printTokenDetails("TABLELINE"); return TABLELINE;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 62 "src/lexer.l"
+#line 63 "src/lexer.l"
 {printTokenDetails("TABLEEND"); return TABLEEND;}   
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 64 "src/lexer.l"
-{printTokenDetails("STARTBRACE"); return STARTBRACE;}
+#line 65 "src/lexer.l"
+{printTokenDetails("STARTBRACE"); return STARTBRACE;}  // these are usually consist of single tokens
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 65 "src/lexer.l"
+#line 66 "src/lexer.l"
 {printTokenDetails("ENDBRACE"); return ENDBRACE;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 66 "src/lexer.l"
+#line 67 "src/lexer.l"
 {printTokenDetails("STARTSQUAREBRACE");return STARTSQUAREBRACE;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 67 "src/lexer.l"
+#line 68 "src/lexer.l"
 {printTokenDetails("ENDSQUAREBRACE"); return ENDSQUAREBRACE;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 68 "src/lexer.l"
+#line 69 "src/lexer.l"
 {/*ignore these characters */};
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 69 "src/lexer.l"
+#line 70 "src/lexer.l"
 {printTokenDetails("COMMENT");}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 70 "src/lexer.l"
+#line 71 "src/lexer.l"
 {printTokenDetails("CONTENT"); yylval.stringValue = new std::string(yytext); return CONTENT;}
 	YY_BREAK
 case 35:
 /* rule 35 can match eol */
 YY_RULE_SETUP
-#line 71 "src/lexer.l"
+#line 72 "src/lexer.l"
 {printTokenDetails("NEWLINE");return NEWLINE;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 72 "src/lexer.l"
+#line 73 "src/lexer.l"
 {printTokenDetails("BACKSLASH"); return BACKSLASH;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 73 "src/lexer.l"
+#line 74 "src/lexer.l"
 {fprintf(stderr,"ERROR %c",*yytext);}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 77 "src/lexer.l"
+#line 78 "src/lexer.l"
 ECHO;
 	YY_BREAK
 #line 1072 "/mnt/c/Users/Garg/Desktop/project/GoogleDoc/LatexToMarkdownConverter/build/lexer.cpp"
@@ -2073,7 +2073,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 77 "src/lexer.l"
+#line 78 "src/lexer.l"
 
 
 int yywrap() {
@@ -2086,7 +2086,7 @@ int main(){
     return 0;
 }*/
 
-
+/* used for debugging */
 void printTokenDetails(const char* s) {
     if (s != NULL) {
         /*size_t length = strlen(yytext);  // Compute the length of the text holding

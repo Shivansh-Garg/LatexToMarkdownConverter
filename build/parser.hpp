@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 28 "src/parser.y"
+#line 31 "src/parser.y"
 
     #include <string>
     #include <algorithm>
@@ -105,9 +105,9 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 22 "src/parser.y"
+#line 25 "src/parser.y"
 
-    ASTNode* node;
+    ASTNode* node;           /* act as a bridge between lexer and parser , it can hold different types of values that may appear in the parse tree during parsing. */
     string* stringValue;
     int intValue;
 
